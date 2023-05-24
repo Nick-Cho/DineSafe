@@ -47,3 +47,19 @@ func Created(body []byte) events.APIGatewayProxyResponse {
 func Accepted(body []byte) events.APIGatewayProxyResponse {
 	return makeResponse(http.StatusAccepted, string(body))
 }
+
+func BadRequest(message ...interface{}) events.APIGatewayProxyResponse {
+	responseBody := makeMessageBody(ServerErrorMessage)
+	if message != nil {
+		responseBody = makeMessageBody(message[0])
+	}
+	return makeResponse(http.StatusBadRequest, responseBody)
+}
+
+func ServerError(message ...interface{}) events.APIGatewayProxyResponse {
+	responseBody := makeMessageBody(ServerErrorMessage)
+	if message != nil {
+		responseBody = makeMessageBody(message[0])
+	}
+	return makeResponse(http.StatusInternalServerError, responseBody)
+}
