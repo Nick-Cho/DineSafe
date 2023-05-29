@@ -1,7 +1,7 @@
 package userModel
 
 type User struct {
-	Id       int    `form:"id" json:"id"`
+	Id       uint   `form:"id" json:"id"`
 	Name     string `form:"name" json:"name"`
 	Email    string `form:"email" json:"email"`
 	Password string `form:"password" json:"password"`
