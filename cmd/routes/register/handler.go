@@ -43,6 +43,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 		log.Println("error creating new user", err)
 		return responses.ServerError(err), fmt.Errorf("error inserting new entry into user table")
 	}
+
 	response := events.APIGatewayProxyResponse{
 		StatusCode: 202,
 		Headers: map[string]string{

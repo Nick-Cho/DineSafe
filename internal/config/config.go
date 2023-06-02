@@ -17,7 +17,8 @@ func Connect() *sql.DB {
 	dbPass := "$Bigley2209"
 	dbName := "allergy_db"
 	dbIp := "tcp(localhost:3306)"
-	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+
+	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
 	defer cancel()
 
 	db, _ := sql.Open(dbDriver, dbUser+":"+dbPass+"@"+dbIp+"/"+dbName)
