@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Nick-Cho/allergy-project/internal/config"
+	config "github.com/Nick-Cho/allergy-project/internal/config"
 	userModel "github.com/Nick-Cho/allergy-project/internal/models"
 	"github.com/Nick-Cho/allergy-project/internal/responses"
 	"github.com/aws/aws-lambda-go/events"
@@ -33,11 +33,10 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	email := requestBody["email"]
 	name := requestBody["name"]
 	password := requestBody["password"]
-
+	fmt.Println(email, name, password) //temp
 	//Encrypt password before saving it in DB
 
 	_, err = db.Exec("INSERT INTO user(name, email, password) VALUES(?, ?, ?)", name, email, password)
-	fmt.Println(email, name, password) //temp
 
 	if err != nil {
 		log.Println("error creating new user", err)
