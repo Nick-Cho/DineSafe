@@ -17,11 +17,17 @@ type Handler struct{}
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var requestBody map[string]string
 	var user userModel.User
+	request.Body =
+		`{
+			"name": "Nick",
+			"email": "nicholas.cho@hotmail.ca",
+			"password": "123"
+		}`
 
+	log.Println(request.Body)
 	fmt.Println(user) //temp
 
 	db := config.Connect()
-	defer db.Close()
 
 	err := json.Unmarshal([]byte(request.Body), &requestBody)
 	if err != nil {
@@ -33,15 +39,23 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	email := requestBody["email"]
 	name := requestBody["name"]
 	password := requestBody["password"]
-	fmt.Println(email, name, password) //temp
+	fmt.Printf("Request email name and password: %s, %s, %s", email, name, password) //temp
+
 	//Encrypt password before saving it in DB
 
-	_, err = db.Exec("INSERT INTO user(name, email, password) VALUES(?, ?, ?)", name, email, password)
+	sqlRequest := fmt.Sprintf("INSERT INTO user(name, email, password) VALUES(%s, %s, %s)", name, email, password)
+	fmt.Printf("sql POST request: %s", sqlRequest)
+	res, err := db.Exec(sqlRequest)
 
 	if err != nil {
 		log.Println("error creating new user", err)
-		return responses.ServerError(err), fmt.Errorf("error inserting new entry into user table")
+		return responses.ServerError(err), fmt.Errorf("error inserting new entry into user table: %s", err)
 	}
+
+	lastId, err := res.LastInsertId()
+	fmt.Printf("User ID inserted: %d\n", lastId)
+
+	defer db.Close()
 
 	response := events.APIGatewayProxyResponse{
 		StatusCode: 202,
