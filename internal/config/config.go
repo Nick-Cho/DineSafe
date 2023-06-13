@@ -13,8 +13,8 @@ var (
 
 func Connect() *sql.DB {
 	dbDriver := "mysql"
-	dbUser := "root"
-	dbPass := "$Bigley2209"
+	dbUser := "admin"
+	dbPass := "bigley2209"
 	dbName := "allergy_db"
 	dbIp := "tcp(allergy-project.cmdsxuexncin.us-east-1.rds.amazonaws.com:3306)"
 
