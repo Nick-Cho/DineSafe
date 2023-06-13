@@ -55,8 +55,6 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	lastId, err := res.LastInsertId()
 	fmt.Printf("User ID inserted: %d\n", lastId)
 
-	defer db.Close()
-
 	response := events.APIGatewayProxyResponse{
 		StatusCode: 202,
 		Headers: map[string]string{
