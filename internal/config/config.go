@@ -28,7 +28,5 @@ func Connect() *sql.DB {
 	db.SetMaxIdleConns(20)
 	db.SetConnMaxLifetime(time.Minute * 5)
 
-	defer db.Close()
-
 	return db
 }
