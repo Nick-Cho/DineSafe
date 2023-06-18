@@ -39,12 +39,12 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	email := requestBody["email"]
 	name := requestBody["name"]
 	password := requestBody["password"]
-	fmt.Printf("Request email name and password: %s, %s, %s", email, name, password) //temp
+	fmt.Printf("Request email name and password: %s, %s, %s\n", email, name, password) //temp
 
 	//Encrypt password before saving it in DB
 
-	sqlRequest := fmt.Sprintf("INSERT INTO user(name, email, password) VALUES(%s, %s, %s)", name, email, password)
-	fmt.Printf("sql POST request: %s", sqlRequest)
+	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Users (id, name, email, password) VALUES (2, '%s', '%s', '%s')", name, email, password)
+	fmt.Printf("sql POST request: %s\n", sqlRequest)
 	res, err := db.Exec(sqlRequest)
 
 	if err != nil {
