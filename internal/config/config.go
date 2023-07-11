@@ -3,7 +3,10 @@ package config
 import (
 	"database/sql"
 	"log"
+	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 var (
@@ -12,11 +15,14 @@ var (
 )
 
 func Connect() *sql.DB {
+	godotenv.Load(".env")
+	err := godotenv.Load(".env")
+
 	dbDriver := "mysql"
 	dbUser := "admin"
-	dbPass := "bigley2209"
+	dbPass := os.Getenv("DB_PASSWORD")
 	dbName := "allergy_db"
-	dbIp := "tcp(allergy-project.cmdsxuexncin.us-east-1.rds.amazonaws.com:3306)"
+	dbIp := os.Getenv("DB_IP")
 
 	db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@"+dbIp+"/"+dbName)
 
