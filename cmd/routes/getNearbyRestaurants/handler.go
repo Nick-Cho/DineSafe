@@ -15,9 +15,8 @@ import (
 type Handler struct{}
 
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	godotenv.Load("../../../.env")
-	err := godotenv.Load("../../../.env")
-	log.Printf("Error %s when creating db\n", err)
+	err := godotenv.Load(".env")
+	log.Printf("Error from loading env: %s\n", err)
 
 	log.Printf("API KEY: %s", os.Getenv("GOOGLE_API_KEY"))
 
