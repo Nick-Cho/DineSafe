@@ -16,7 +16,7 @@ var (
 
 func Connect() *sql.DB {
 
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load(".env")
 
 	dbDriver := "mysql"
 	dbUser := "admin"
