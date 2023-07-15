@@ -1,26 +1,28 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/aws/aws-lambda-go/events"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/joho/godotenv"
 )
 
 type Handler struct{}
 
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	err := godotenv.Load(".env")
-	log.Printf("Error from loading env: %s\n", err)
-
-	log.Printf("API KEY: %s", os.Getenv("GOOGLE_API_KEY"))
-
-	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Restaurant&inputtype=textquery&fields=formatted_address,name,rating,opening_hours,geometry&key=%s", os.Getenv("GOOGLE_API_KEY"))
+	var requestBody map[string]string
+	request.Body =
+		`{
+			"latitude": "43.8272",
+			"longitude": "-79.2788992",
+		}`
+	err := json.Unmarshal([]byte(request.Body), &requestBody)
+	// latitude := requestBody["latitude"]
+	// longitude := requestBody["longitude"]
+	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=43.8272,-79.2788992&radius=10000&type=restaurant&key=AIzaSyCEMyZMx4vfrx8-fU22fwGljlPOBkEervo")
 	method := "GET"
 
 	client := &http.Client{}
