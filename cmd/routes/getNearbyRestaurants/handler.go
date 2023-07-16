@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
+	"github.com/Nick-Cho/allergy-project/internal/responses"
 	"github.com/aws/aws-lambda-go/events"
-	_ "github.com/go-sql-driver/mysql"
 )
 
 type Handler struct{}
@@ -17,12 +18,24 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	request.Body =
 		`{
 			"latitude": "43.8272",
-			"longitude": "-79.2788992",
+			"longitude": "-79.2788992"
 		}`
 	err := json.Unmarshal([]byte(request.Body), &requestBody)
-	// latitude := requestBody["latitude"]
-	// longitude := requestBody["longitude"]
-	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=43.8272,-79.2788992&radius=10000&type=restaurant&key=AIzaSyCEMyZMx4vfrx8-fU22fwGljlPOBkEervo")
+
+	if err != nil {
+		log.Println("error unmarshalling lat and long | ", err)
+		return responses.ServerError(err), fmt.Errorf("error unmarshalling lat and long")
+	}
+
+	latitude := requestBody["latitude"]
+	longitude := requestBody["longitude"]
+
+	// presetUrl := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=43.8272,-79.2788992&radius=10000&type=restaurant&key=AIzaSyCEMyZMx4vfrx8-fU22fwGljlPOBkEervo")
+	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s,%s&radius=10000&type=restaurant&key=AIzaSyCEMyZMx4vfrx8-fU22fwGljlPOBkEervo", latitude, longitude)
+
+	// log.Println("URL without variables: ", presetUrl)
+	log.Println("URL with variables: ", url)
+
 	method := "GET"
 
 	client := &http.Client{}
