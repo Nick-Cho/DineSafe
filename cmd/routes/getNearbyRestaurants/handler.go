@@ -31,7 +31,6 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	latitude := requestBody["latitude"]
 	longitude := requestBody["longitude"]
 
-	// presetUrl := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=43.8272,-79.2788992&radius=10000&type=restaurant&key=AIzaSyCEMyZMx4vfrx8-fU22fwGljlPOBkEervo")
 	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s,%s&radius=10000&type=restaurant&key=%s", latitude, longitude, os.Getenv("GOOGLE_API_KEY"))
 
 	// log.Println("URL without variables: ", presetUrl)
