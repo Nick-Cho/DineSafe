@@ -18,39 +18,34 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	request.Body =
 		`{
-			"street_address": "5285 Yonge St Unit5"
+			"street_address": "5285 Yonge St Unit5",
+			"name": "Yunshang Rice Noodle",
+			"city": "North York"
 		}`
-	// request.Body =
-	// 	`{
-	// 		"name": "Nick",
-	// 		"email": "nicholas.cho@hotmail.ca",
-	// 		"password": "123"
-	// 	}`
 
-	// log.Println(request.Body)
+	log.Println(request.Body)
 
 	db := config.Connect()
 
 	err := json.Unmarshal([]byte(request.Body), &requestBody)
+
 	if err != nil {
-		log.Println("error unmarshalling response body from register user request | ", err)
-		return responses.ServerError(err), fmt.Errorf("error unmarshalling response body from create user request")
+		log.Println("error unmarshalling response body from insert restaurant request | ", err)
+		return responses.ServerError(err), fmt.Errorf("error unmarshalling response body from insert restaurant request")
 	}
 
 	//Should check if the user exists first
-	email := requestBody["email"]
+	address := requestBody["street_address"]
 	name := requestBody["name"]
-	password := requestBody["password"]
-	fmt.Printf("Request email name and password: %s, %s, %s\n", email, name, password) //temp
+	city := requestBody["city"]
+	fmt.Printf("Requested Insert Restaurant: %s, %s, %s\n", address, name, city)
 
-	//Encrypt password before saving it in DB
-
-	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Users (id, name, email, password) VALUES (2, '%s', '%s', '%s')", name, email, password)
+	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Restaurants (street_address, name, city) VALUES ('%s', '%s', '%s')", address, name, city)
 	fmt.Printf("sql POST request: %s\n", sqlRequest)
 	res, err := db.Exec(sqlRequest)
 
 	if err != nil {
-		log.Println("error creating new user", err)
+		log.Println("error creating new restaurant", err)
 		return responses.ServerError(err), fmt.Errorf("error inserting new entry into user table: %s", err)
 	}
 
