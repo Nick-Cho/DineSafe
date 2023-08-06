@@ -13,10 +13,9 @@ import (
 
 type Handler struct{}
 
-type RestaurantInfo struct {
-	Street_Address int    `json:"id"`
-	Name           string `json:"name"`
-	City           string `json:"city"`
+type ReviewInfo struct {
+	Id     int    `json:"id"`
+	Review string `json:"city"`
 }
 
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -37,23 +36,29 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	streetAddress := requestBody["street_address"]
 	fmt.Printf("Request street address : %s\n", streetAddress) //temp
 
-	sqlRequest := fmt.Sprintf("SELECT * FROM allergy_db.Restaurant WHERE street_address='%s'", streetAddress)
+	sqlRequest := fmt.Sprintf(
+		"SELECT r.*, R.*"+
+			"FROM allergy_db.Restaurants R"+
+			"INNER JOIN restaurant_reviews rR"+
+			"ON rR.restaurant_address = %s"+
+			"INNER JOIN allergy_db.Reviews r"+
+			"ON r.id = rR.review_id",
+		streetAddress)
 	fmt.Printf("sql GET request: %s\n", sqlRequest)
 	res, err := db.Query(sqlRequest)
 
 	// Formatting MySQL response to JSON
-	var restaurant RestaurantInfo
+	var review ReviewInfo
 	for res.Next() {
 		// for each row, scan the result into our tag composite object
-		var tempStreetAddress string
-		var tempName string
-		var tempCity string
-		err = res.Scan(&restaurant.Street_Address, &restaurant.Name, &restaurant.City, &tempStreetAddress, &tempName, &tempCity)
+		var tempId int
+		var tempReview string
+		err = res.Scan(&review.Id, &review.Review, &tempId, &tempReview)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 
-		log.Printf(restaurant.Name)
+		log.Printf(review.Review)
 	}
 
 	// fmt.Printf("Response from db execution: %s\n", res)
@@ -64,7 +69,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	}
 	defer db.Close()
 
-	responseBody, err := json.Marshal(restaurant)
+	responseBody, err := json.Marshal(review)
 	if err != nil {
 		log.Println("ERROR MARSHALLING RESPONSE BODY TO JSON", err)
 		return responses.ServerError(err), fmt.Errorf("ERROR MARSHALLING RESPONSE BODY TO JSON")
