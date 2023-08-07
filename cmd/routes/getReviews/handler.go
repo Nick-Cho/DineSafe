@@ -36,6 +36,8 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	streetAddress := requestBody["street_address"]
 	fmt.Printf("Request street address : %s\n", streetAddress) //temp
 
+	//CHECK IF RESTAURANT EXISTS AND PUSH IN A NEW RESTAURANT INSTANCE IF IT DOESN'T AND RETURN BLANK ARRAY
+
 	sqlRequest := fmt.Sprintf(
 		`SELECT r.*
 			FROM allergy_db.Restaurants R
