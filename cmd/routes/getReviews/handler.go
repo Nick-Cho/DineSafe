@@ -37,39 +37,47 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	fmt.Printf("Request street address : %s\n", streetAddress) //temp
 
 	sqlRequest := fmt.Sprintf(
-		"SELECT r.*, R.*"+
-			"FROM allergy_db.Restaurants R"+
-			"INNER JOIN restaurant_reviews rR"+
-			"ON rR.restaurant_address = %s"+
-			"INNER JOIN allergy_db.Reviews r"+
-			"ON r.id = rR.review_id",
+		`SELECT r.*
+			FROM allergy_db.Restaurants R
+			INNER JOIN restaurant_reviews rR
+			ON rR.restaurant_address = '%s'
+			INNER JOIN allergy_db.Reviews r
+			ON r.id = rR.review_id`,
 		streetAddress)
+
 	fmt.Printf("sql GET request: %s\n", sqlRequest)
 	res, err := db.Query(sqlRequest)
-
+	fmt.Printf("Flag 1")
+	// fmt.Printf("Response from db Query:  | %s ", res)
 	// Formatting MySQL response to JSON
-	var review ReviewInfo
+	var reviews []ReviewInfo
 	for res.Next() {
 		// for each row, scan the result into our tag composite object
 		var tempId int
 		var tempReview string
-		err = res.Scan(&review.Id, &review.Review, &tempId, &tempReview)
+
+		err = res.Scan(&tempId, &tempReview) // &tempId, &tempReview
+
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 
-		log.Printf(review.Review)
+		var reviewInst ReviewInfo
+		reviewInst.Id = tempId
+		reviewInst.Review = tempReview
+		reviews = append(reviews, reviewInst)
+		// log.Printf(review.Review)
 	}
-
+	fmt.Printf("Flag 2")
 	// fmt.Printf("Response from db execution: %s\n", res)
 
 	if err != nil {
-		log.Println("Error pulling user", err)
-		return responses.ServerError(err), fmt.Errorf("error pulling user from table: %s", err)
+		log.Println("Error pulling reviews", err)
+		return responses.ServerError(err), fmt.Errorf("error pulling review from inner join table: %s", err)
 	}
 	defer db.Close()
 
-	responseBody, err := json.Marshal(review)
+	responseBody, err := json.Marshal(reviews)
 	if err != nil {
 		log.Println("ERROR MARSHALLING RESPONSE BODY TO JSON", err)
 		return responses.ServerError(err), fmt.Errorf("ERROR MARSHALLING RESPONSE BODY TO JSON")
