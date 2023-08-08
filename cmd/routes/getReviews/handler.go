@@ -15,14 +15,20 @@ type Handler struct{}
 
 type ReviewInfo struct {
 	Id     int    `json:"id"`
-	Review string `json:"city"`
+	Review string `json:"review"`
+}
+
+type RestaurantInfo struct {
+	StreetAddress string `json:"streetAddress"`
+	Name          string `json:"name"`
+	City          string `json:"city"`
 }
 
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var requestBody map[string]string
 	request.Body =
 		`{
-			"street_address": "5285 Yonge St Unit5"
+			"street_address": ""
 		}`
 	db := config.Connect()
 
@@ -34,9 +40,26 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	}
 
 	streetAddress := requestBody["street_address"]
-	fmt.Printf("Request street address : %s\n", streetAddress) //temp
 
 	//CHECK IF RESTAURANT EXISTS AND PUSH IN A NEW RESTAURANT INSTANCE IF IT DOESN'T AND RETURN BLANK ARRAY
+	// Seeing if the restaurant exists before trying to grab the reviews linked to it
+	restaurantCheck := fmt.Sprintf("SELECT * FROM allergy_db.Restaurants WHERE street_address='%s'", streetAddress)
+
+	res, err := db.Query(restaurantCheck)
+
+	var restaurant RestaurantInfo
+
+	for res.Next() {
+		// for each row, scan the result into our tag composite object
+		err = res.Scan(&restaurant.StreetAddress, &restaurant.Name, &restaurant.City)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		// log.Printf("Queried restaurant name: %s", restaurant.Name)
+	}
+	if restaurant.Name == "" {
+		// Case where no restaurant currently exists with the address provided
+	}
 
 	sqlRequest := fmt.Sprintf(
 		`SELECT r.*
@@ -47,9 +70,9 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 			ON r.id = rR.review_id`,
 		streetAddress)
 
-	fmt.Printf("sql GET request: %s\n", sqlRequest)
-	res, err := db.Query(sqlRequest)
-	fmt.Printf("Flag 1")
+	// fmt.Printf("sql GET request: %s\n", sqlRequest)
+	res, err = db.Query(sqlRequest)
+
 	// fmt.Printf("Response from db Query:  | %s ", res)
 	// Formatting MySQL response to JSON
 	var reviews []ReviewInfo
@@ -70,7 +93,6 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 		reviews = append(reviews, reviewInst)
 		// log.Printf(review.Review)
 	}
-	fmt.Printf("Flag 2")
 	// fmt.Printf("Response from db execution: %s\n", res)
 
 	if err != nil {
