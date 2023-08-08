@@ -34,7 +34,6 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 		return responses.ServerError(err), fmt.Errorf("error unmarshalling response body from insert restaurant request")
 	}
 
-	//Should check if the user exists first
 	address := requestBody["street_address"]
 	name := requestBody["name"]
 	city := requestBody["city"]

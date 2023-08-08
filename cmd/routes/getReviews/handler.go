@@ -59,6 +59,10 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	}
 	if restaurant.Name == "" {
 		// Case where no restaurant currently exists with the address provided
+
+		// Call Search Restaurant endpoint and parse it to get the info needed for a new restaurant entry
+
+		// Call insertRestaurant with the info receieved to register the restaurant and then return null response body
 	}
 
 	sqlRequest := fmt.Sprintf(
