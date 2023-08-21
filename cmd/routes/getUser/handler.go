@@ -19,21 +19,21 @@ type AccInfo struct {
 }
 
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var requestBody map[string]string
-	request.Body =
-		`{
-			"email": "nicholas.cho@hotmail.ca"
-		}`
+	// var requestBody map[string]string
+	// request.Body =
+	// 	`{
+	// 		"email": "nicholas.cho@hotmail.ca"
+	// 	}`
 	db := config.Connect()
 
-	err := json.Unmarshal([]byte(request.Body), &requestBody)
+	// err := json.Unmarshal([]byte(request.Body), &requestBody)
 
-	if err != nil {
-		log.Println("error unmarshalling response body from register user request | ", err)
-		return responses.ServerError(err), fmt.Errorf("error unmarshalling response body from create user request")
-	}
+	// if err != nil {
+	// 	log.Println("error unmarshalling response body from register user request | ", err)
+	// 	return responses.ServerError(err), fmt.Errorf("error unmarshalling response body from create user request")
+	// }
 
-	email := requestBody["email"]
+	email := request.PathParameters["email"]
 	fmt.Printf("Request email : %s\n", email) //temp
 
 	sqlRequest := fmt.Sprintf("SELECT * FROM allergy_db.Users WHERE Email='%s'", email)
