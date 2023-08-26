@@ -47,6 +47,11 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	res, err := db.Query(restaurantCheck)
 
+	if err != nil {
+		log.Println("error from querying database to check in restaurant is present in Db in getRestaurantReviews route: ", err)
+		return responses.ServerError(err), fmt.Errorf("error from querying database to check in restaurant is present in Db in getRestaurantReviews route")
+	}
+
 	var restaurant RestaurantInfo
 
 	for res.Next() {
@@ -62,7 +67,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 		// Call Search Restaurant endpoint and parse it to get the info needed for a new restaurant entry
 
-		// Call insertRestaurant with the info receieved to register the restaurant and then return null response body
+		// Call insertRestaurant with the info receieved to register the restaurant and then return null response body indicating no reviews
 	}
 
 	sqlRequest := fmt.Sprintf(
