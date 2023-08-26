@@ -25,24 +25,11 @@ type RestaurantInfo struct {
 }
 
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var requestBody map[string]string
-	request.Body =
-		`{
-			"street_address": ""
-		}`
 	db := config.Connect()
 
-	err := json.Unmarshal([]byte(request.Body), &requestBody)
+	streetAddress := request.QueryStringParameters["street_address"]
 
-	if err != nil {
-		log.Println("error unmarshalling response body from register user request | ", err)
-		return responses.ServerError(err), fmt.Errorf("error unmarshalling response body from create user request")
-	}
-
-	streetAddress := requestBody["street_address"]
-
-	//CHECK IF RESTAURANT EXISTS AND PUSH IN A NEW RESTAURANT INSTANCE IF IT DOESN'T AND RETURN BLANK ARRAY
-	// Seeing if the restaurant exists before trying to grab the reviews linked to it
+	// Checking if the restaurant exists before trying to grab the reviews linked to it
 	restaurantCheck := fmt.Sprintf("SELECT * FROM allergy_db.Restaurants WHERE street_address='%s'", streetAddress)
 
 	res, err := db.Query(restaurantCheck)
@@ -64,10 +51,17 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	}
 	if restaurant.Name == "" {
 		// Case where no restaurant currently exists with the address provided
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 202,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
+			},
+			Body: "Restaurant not in DB",
+		}
 
-		// Call Search Restaurant endpoint and parse it to get the info needed for a new restaurant entry
-
-		// Call insertRestaurant with the info receieved to register the restaurant and then return null response body indicating no reviews
+		return response, nil
 	}
 
 	sqlRequest := fmt.Sprintf(
