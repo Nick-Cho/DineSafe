@@ -6,6 +6,6 @@ import (
 
 func main() {
 	handler := Handler{}
-	
+
 	lambda.Start(handler.HandleRequest)
 }
