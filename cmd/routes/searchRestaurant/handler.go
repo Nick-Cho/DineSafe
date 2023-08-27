@@ -30,9 +30,23 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	search := request.QueryStringParameters["search"]
 	longitude := request.QueryStringParameters["longitude"]
 	latitude := request.QueryStringParameters["latitude"]
+
 	log.Println("search parameter: ", search)
 	log.Println("longitude parameter: ", longitude)
 	log.Println("latitude parameter: ", latitude)
+
+	if search == "" || longitude == "" || latitude == "" {
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 202,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
+			},
+			Body: "Query string values missing in searchRestaurant route. Must provide a search longitude and a latitude",
+		}
+		return response, nil
+	}
 	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%s&inputtype=textquery&locationbias=circle:20000@%s,%s&fields=formatted_address,name,rating,opening_hours&key=%s", search, latitude, longitude, os.Getenv("GOOGLE_API_KEY"))
 	method := "GET"
 

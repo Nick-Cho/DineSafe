@@ -20,10 +20,10 @@ type AccInfo struct {
 
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var requestBody map[string]string
-	request.Body =
-		`{
-			"email": "nicholas.cho@hotmail.ca"
-		}`
+	// request.Body =
+	// 	`{
+	// 		"email": "nicholas.cho@hotmail.ca"
+	// 	}`
 	db := config.Connect()
 
 	err := json.Unmarshal([]byte(request.Body), &requestBody)

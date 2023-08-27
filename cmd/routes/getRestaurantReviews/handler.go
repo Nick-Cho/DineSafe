@@ -28,6 +28,19 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	db := config.Connect()
 
 	streetAddress := request.QueryStringParameters["street_address"]
+	if streetAddress == "" {
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 202,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
+			},
+			Body: "No street address provided to the getRestaurantReviews route",
+		}
+
+		return response, nil
+	}
 
 	// Checking if the restaurant exists before trying to grab the reviews linked to it
 	restaurantCheck := fmt.Sprintf("SELECT * FROM allergy_db.Restaurants WHERE street_address='%s'", streetAddress)

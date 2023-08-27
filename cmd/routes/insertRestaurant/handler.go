@@ -16,12 +16,12 @@ type Handler struct{}
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var requestBody map[string]string
 
-	request.Body =
-		`{
-			"street_address": "5285 Yonge St Unit5",
-			"name": "Yunshang Rice Noodle",
-			"city": "North York"
-		}`
+	// request.Body =
+	// 	`{
+	// 		"street_address": "5285 Yonge St Unit5",
+	// 		"name": "Yunshang Rice Noodle",
+	// 		"city": "North York"
+	// 	}`
 
 	log.Println(request.Body)
 
