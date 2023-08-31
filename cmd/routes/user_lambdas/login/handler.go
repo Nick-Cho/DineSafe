@@ -17,7 +17,7 @@ type Handler struct{}
 type AccInfo struct {
 	ID       int    `json:"id"`
 	Name     string `json:"name"`
-	Password string `json:password`
+	Password string `json:"password"`
 }
 
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
