@@ -7,15 +7,25 @@ module.exports = {
   theme: {
     colors: { 
         "white": "#ffffff",
-        "black": "#000000"
+        "black": "#000000",
+        "btn-gray": "#333333"
     },
     fontFamily: {
       'uber': ['Uber Move Text', 'sans-serif']
     },
     extend: {
       gridTemplateColumns: {
-        // Simple 16 column grid
         '16': 'repeat(16, minmax(0, 1fr))',        
+      },
+      gridColumnStart: {
+        '13': '13',
+        '14': '14',
+        '15': '15',
+        '16': '16',
+        '17': '17',
+      },
+      margin: {
+        '50%': '50%'
       },
       fontFamily: {
         'uber': ['Uber Move Text', 'sans-serif']
