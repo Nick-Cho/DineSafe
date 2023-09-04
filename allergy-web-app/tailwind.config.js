@@ -8,7 +8,8 @@ module.exports = {
     colors: { 
         "white": "#ffffff",
         "black": "#000000",
-        "btn-gray": "#333333"
+        "btn-gray": "#333333",
+        "gray": "#eeeeee"
     },
     fontFamily: {
       'uber': ['Uber Move Text', 'sans-serif']

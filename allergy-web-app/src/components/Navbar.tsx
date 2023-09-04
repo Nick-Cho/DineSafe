@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-
 import Login from './Login'
 function Navbar() {
-
   const [showLogin, setShowLogin] = useState<boolean>(false);
   return (
     <div>
@@ -43,7 +41,7 @@ function Navbar() {
           </div>
         </div>
       </nav>
-      <div className={`relative overflow-hidden w-full h-screen ${showLogin ? "translate-y-0 visible" : "-translate-y-full invisible"}  duration-300`}>
+      <div className={`relative overflow-hidden justify-center w-full h-screen ${showLogin ? "translate-y-0 visible" : "-translate-y-full invisible"}  duration-300`}>
         <Login showLogin={showLogin} />
       </div>
     </div>
