@@ -30,8 +30,18 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	err := json.Unmarshal([]byte(request.Body), &requestBody)
 
 	if err != nil {
-		log.Println("error unmarshalling response body from insert restaurant request | ", err)
-		return responses.ServerError(err), fmt.Errorf("error unmarshalling response body from insert restaurant request")
+		log.Println("error unmarshalling response body from login request | ", err)
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Headers: map[string]string{
+				"Access-Control-Expose-Headers":    "Access-Control-Allow-Origin",
+				"Access-Control-Allow-Credentials": "true",
+				"Content-Type":                     "application/json",
+				"Access-Control-Allow-Origin":      "*",
+			},
+			Body: string("Error unmarshalling response body from login request"),
+		}
+		return response, nil
 	}
 
 	email := requestBody["email"]
@@ -73,22 +83,24 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	if err == nil {
 		//Succesful login
 		response := events.APIGatewayProxyResponse{
-			StatusCode: 202,
+			StatusCode: 200,
 			Headers: map[string]string{
-				"Access-Control-Allow-Origin":      "*",
-				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Expose-Headers":    "Access-Control-Allow-Origin",
 				"Access-Control-Allow-Credentials": "true",
+				"Content-Type":                     "application/json",
+				"Access-Control-Allow-Origin":      "*",
 			},
 			Body: string("Success"),
 		}
 		return response, nil
 	} else {
 		response := events.APIGatewayProxyResponse{
-			StatusCode: 202,
+			StatusCode: 400,
 			Headers: map[string]string{
-				"Access-Control-Allow-Origin":      "*",
-				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Expose-Headers":    "Access-Control-Allow-Origin",
 				"Access-Control-Allow-Credentials": "true",
+				"Content-Type":                     "application/json",
+				"Access-Control-Allow-Origin":      "*",
 			},
 			Body: string("Failed login password does not match"),
 		}
