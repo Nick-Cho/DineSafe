@@ -4,9 +4,10 @@ import axios from "axios"
 
 type Props = {
   showLogin: boolean;
+  showSignup: boolean;
 }
 
-function Login({ showLogin }: Props) {
+function AuthForm({ showLogin, showSignup }: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -70,4 +71,4 @@ function Login({ showLogin }: Props) {
   )
 }
 
-export default Login
+export default AuthForm

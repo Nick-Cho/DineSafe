@@ -2,11 +2,8 @@ import React, { useState } from 'react'
 import env from "react-dotenv";
 import axios from "axios"
 
-type Props = {
-  showLogin: boolean;
-}
 
-function Login({ showLogin }: Props) {
+function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -61,7 +58,9 @@ function Login({ showLogin }: Props) {
               </button>
             </div>
           </form>
-          <h1 className="font-uber underline font-medium cursor-pointer mt-4">
+          <h1
+            className="font-uber underline font-medium cursor-pointer mt-4"
+          >
             Forgot your password?
           </h1>
         </div>
@@ -70,4 +69,4 @@ function Login({ showLogin }: Props) {
   )
 }
 
-export default Login
+export default Signup

@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import Login from './Login'
+import AuthForm from './AuthForm'
+
 function Navbar() {
   const [showLogin, setShowLogin] = useState<boolean>(false);
+  const [showSignup, setShowSignup] = useState<boolean>(false);
   return (
     <div>
       <nav>
@@ -33,7 +35,10 @@ function Navbar() {
               </h1>
             </div>
 
-            <div className="my-3 py-2 px-3 ml-2 rounded-full bg-white cursor-pointer font-small">
+            <div
+              className="my-3 py-2 px-3 ml-2 rounded-full bg-white cursor-pointer font-small"
+              onClick={() => { setShowSignup(!showSignup) }}
+            >
               <h1 className="text-black">
                 Sign up
               </h1>
@@ -41,8 +46,9 @@ function Navbar() {
           </div>
         </div>
       </nav>
+
       <div className={`relative overflow-hidden justify-center w-full h-screen ${showLogin ? "translate-y-0 visible" : "-translate-y-full invisible"}  duration-300`}>
-        <Login showLogin={showLogin} />
+        <AuthForm showLogin={showLogin} showSignup={showSignup} />
       </div>
     </div>
   )
