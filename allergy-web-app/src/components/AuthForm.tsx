@@ -64,12 +64,12 @@ function AuthForm({ showLogin, showSignup }: Props) {
 
           <form onSubmit={handleLogin}>
             <div className="w-80">
-              {showSignup &&
+              { showSignup &&
                 <input
                   type="text"
                   className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
                   placeholder="Enter your name"
-                  onChange={(e) => { setUsername(e.target.value) }}
+                  onChange={(e) => { setName(e.target.value) }}
                 />
               }
               <input
@@ -80,26 +80,26 @@ function AuthForm({ showLogin, showSignup }: Props) {
               />
               <input
                 type="password"
-                className="w-full bg-gray rounded-lg mt-4 py-3 px-4"
+                className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
                 placeholder="Enter password"
                 onChange={(e) => { setPassword(e.target.value) }}
               />
-              {
-                showSignup &&
+              {showSignup &&
                 <input
                   type="password"
-                  className="w-full bg-gray rounded-lg mt-4 py-3 px-4"
+                  className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
                   placeholder="Re-enter password"
                   onChange={(e) => { setConfirmPswd(e.target.value) }}
                 />
               }
               <button
-                className={`${(showSignup && ((password !== confirmPswd) || name === "")) ? "bg-btn-gray" : "bg-black"} 
-                  text-white w-full rounded-lg mt-4 py-3 cursor-pointer`}
+                className={`${(showSignup && ((password !== confirmPswd) || name === "")) ? "bg-btn-gray cursor-not-allowed" : "bg-black cursor-pointer"} 
+                  text-white w-full rounded-lg mt-4 py-3`}
                 disabled={showSignup && ((password !== confirmPswd) || name === "")}
               >
                 {showSignup ?
-                  "Sign up" : "Log in"}
+                  "Sign up" : "Log in"
+                }
               </button>
             </div>
           </form>

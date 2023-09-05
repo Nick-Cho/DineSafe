@@ -666,6 +666,10 @@ video {
   cursor: pointer;
 }
 
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
 .items-center {
   align-items: center;
 }
