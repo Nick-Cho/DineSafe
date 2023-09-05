@@ -2,9 +2,6 @@ import React, { useState } from 'react'
 import env from "react-dotenv";
 import axios from "axios"
 
-import Login from "./forms/Login"
-import Signup from "./forms/Signup"
-
 type Props = {
   showLogin: boolean;
   showSignup: boolean;
@@ -70,7 +67,11 @@ function AuthForm({ showLogin, showSignup }: Props) {
                   onChange={(e) => { setConfirmPswd(e.target.value) }}
                 />
               }
-              <button className="bg-black text-white w-full rounded-lg mt-4 py-3 ">
+              <button 
+                className={`${(showSignup && (password === confirmPswd)) ? "bg-gray": "bg-black"} 
+                  text-white w-full rounded-lg mt-4 py-3 cursor-pointer`}
+                disabled={showSignup && (password !== confirmPswd)}
+              >
                 {showSignup ? 
                 "Sign up" : "Log in"}
               </button>
