@@ -16,12 +16,23 @@ function Login({ showLogin }: Props) {
       {
         email: username.toString(),
         password: password.toString()
-      })
+      }
+    )
 
     console.log("request body for login request: ", requestBody);
-    const response = await axios.post(`${env.API_URL}/login`, requestBody.toString());
+    try {
+      const response = await axios.post(`${env.API_URL}/login`, requestBody);
+      console.log(response);
+      if (response.status === 200) {
+        //successful login, save user data in the redux store
 
-    console.log("Response from login request: ", response);
+      }
+      if (response && response.status === 400) {
+        console.log("Failed login: ", response.data);
+      }
+    } catch (err: any) {
+      console.log("Login failed: ", err.response.data);
+    }
   }
   return (
     <>

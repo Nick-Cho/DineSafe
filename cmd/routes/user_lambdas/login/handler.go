@@ -1,6 +1,7 @@
 package main
 
 import (
+	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -23,8 +24,6 @@ type AccInfo struct {
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var requestBody map[string]string
 
-	log.Println("login request body: ", request.Body)
-
 	if request.Body == "" {
 		response := events.APIGatewayProxyResponse{
 			StatusCode: 400,
@@ -40,7 +39,9 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	db := config.Connect()
 
-	err := json.Unmarshal([]byte(request.Body), &requestBody)
+	sDec, _ := b64.StdEncoding.DecodeString(request.Body)
+	log.Println("login request body: ", sDec)
+	err := json.Unmarshal([]byte(sDec), &requestBody)
 
 	if err != nil {
 		log.Println("error unmarshalling request body from login request | ", err)
