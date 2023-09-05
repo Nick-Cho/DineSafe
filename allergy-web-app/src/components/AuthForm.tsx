@@ -60,24 +60,24 @@ function AuthForm({ showLogin, showSignup }: Props) {
               />
               {
                 showSignup &&
-                <input 
+                <input
                   type="password"
                   className="w-full bg-gray rounded-lg mt-4 py-3 px-4"
                   placeholder="Re-enter password"
                   onChange={(e) => { setConfirmPswd(e.target.value) }}
                 />
               }
-              <button 
-                className={`${(showSignup && (password === confirmPswd)) ? "bg-gray": "bg-black"} 
+              <button
+                className={`${(showSignup && (password !== confirmPswd)) ? "bg-gray" : "bg-black"} 
                   text-white w-full rounded-lg mt-4 py-3 cursor-pointer`}
                 disabled={showSignup && (password !== confirmPswd)}
               >
-                {showSignup ? 
-                "Sign up" : "Log in"}
+                {showSignup ?
+                  "Sign up" : "Log in"}
               </button>
             </div>
           </form>
-          {showLogin && 
+          {showLogin &&
             <h1 className="font-uber underline font-medium cursor-pointer mt-4">
               Forgot your password?
             </h1>
