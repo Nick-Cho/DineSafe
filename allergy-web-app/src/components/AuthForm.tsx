@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import env from "react-dotenv";
 import axios from "axios"
 
+import Login from "./forms/Login"
+import Signup from "./forms/Signup"
+
 type Props = {
   showLogin: boolean;
   showSignup: boolean;
@@ -10,13 +13,14 @@ type Props = {
 function AuthForm({ showLogin, showSignup }: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPswd, setConfirmPswd] = useState("");
 
-  const handleSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
+  const handleLogin = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
     const requestBody = JSON.stringify(
       {
-        email: username.toString(),
-        password: password.toString()
+        email: username,
+        password: password
       }
     )
 
@@ -39,12 +43,12 @@ function AuthForm({ showLogin, showSignup }: Props) {
     <>
       <div className="bg-white w-full h-screen flex justify-center items-center overflow-hidden">
         <div className="block text-center">
-          <h1 className="font-uber text-3xl">
+          <h1 className="font-uber font-medium text-2xl">
             Welcome to Placeholder
           </h1>
 
-          <form onSubmit={handleSubmit}>
-            <div>
+          <form onSubmit={handleLogin}>
+            <div className="w-80">
               <input
                 type="text"
                 className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
@@ -57,14 +61,26 @@ function AuthForm({ showLogin, showSignup }: Props) {
                 placeholder="Enter password"
                 onChange={(e) => { setPassword(e.target.value) }}
               />
+              {
+                showSignup &&
+                <input 
+                  type="password"
+                  className="w-full bg-gray rounded-lg mt-4 py-3 px-4"
+                  placeholder="Re-enter password"
+                  onChange={(e) => { setConfirmPswd(e.target.value) }}
+                />
+              }
               <button className="bg-black text-white w-full rounded-lg mt-4 py-3 ">
-                Log in
+                {showSignup ? 
+                "Sign up" : "Log in"}
               </button>
             </div>
           </form>
-          <h1 className="font-uber underline font-medium cursor-pointer mt-4">
-            Forgot your password?
-          </h1>
+          {showLogin && 
+            <h1 className="font-uber underline font-medium cursor-pointer mt-4">
+              Forgot your password?
+            </h1>
+          }
         </div>
       </div>
     </>
