@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import env from "react-dotenv";
 import axios from "axios"
 
@@ -10,13 +10,16 @@ function Login({ showLogin }: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e: React.SyntheticEvent<EventTarget>)  => {
+  const handleSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
+    const requestBody = JSON.stringify(
+      {
+        email: username.toString(),
+        password: password.toString()
+      })
 
-    const response = await axios.post(`${env.API_URL}/login`, {
-      email: username,
-      password: password
-    });
+    console.log("request body for login request: ", requestBody);
+    const response = await axios.post(`${env.API_URL}/login`, requestBody.toString());
 
     console.log("Response from login request: ", response);
   }
@@ -34,24 +37,24 @@ function Login({ showLogin }: Props) {
                 type="text"
                 className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
                 placeholder="Enter phone number or email"
-                onChange={(e)=>{setUsername(e.target.value)}}
+                onChange={(e) => { setUsername(e.target.value) }}
               />
               <input
                 type="password"
                 className="w-full bg-gray rounded-lg mt-4 py-3 px-4"
                 placeholder="Enter password"
-                onChange={(e)=>{setPassword(e.target.value)}}
+                onChange={(e) => { setPassword(e.target.value) }}
               />
               <button className="bg-black text-white w-full rounded-lg mt-4 py-3 ">
-                Continue
+                Log in
               </button>
             </div>
           </form>
-          <h1 
+          <h1
             className="font-uber underline font-medium cursor-pointer mt-4"
-          > 
+          >
             Forgot your password?
-            </h1>
+          </h1>
         </div>
       </div>
     </>

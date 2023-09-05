@@ -23,21 +23,33 @@ type AccInfo struct {
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var requestBody map[string]string
 
-	log.Println(request.Body)
+	log.Println("login request body: ", request.Body)
+
+	if request.Body == "" {
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
+			},
+			Body: string("No request body provided"),
+		}
+		return response, nil
+	}
 
 	db := config.Connect()
 
 	err := json.Unmarshal([]byte(request.Body), &requestBody)
 
 	if err != nil {
-		log.Println("error unmarshalling response body from login request | ", err)
+		log.Println("error unmarshalling request body from login request | ", err)
 		response := events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Headers: map[string]string{
-				"Access-Control-Expose-Headers":    "Access-Control-Allow-Origin",
-				"Access-Control-Allow-Credentials": "true",
-				"Content-Type":                     "application/json",
 				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
 			},
 			Body: string("Error unmarshalling response body from login request"),
 		}
@@ -85,10 +97,9 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 		response := events.APIGatewayProxyResponse{
 			StatusCode: 200,
 			Headers: map[string]string{
-				"Access-Control-Expose-Headers":    "Access-Control-Allow-Origin",
-				"Access-Control-Allow-Credentials": "true",
-				"Content-Type":                     "application/json",
 				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
 			},
 			Body: string("Success"),
 		}
@@ -97,10 +108,9 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 		response := events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Headers: map[string]string{
-				"Access-Control-Expose-Headers":    "Access-Control-Allow-Origin",
-				"Access-Control-Allow-Credentials": "true",
-				"Content-Type":                     "application/json",
 				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
 			},
 			Body: string("Failed login password does not match"),
 		}
