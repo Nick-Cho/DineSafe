@@ -8,6 +8,7 @@ type Props = {
 }
 
 function AuthForm({ showLogin, showSignup }: Props) {
+  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPswd, setConfirmPswd] = useState("");
@@ -36,6 +37,23 @@ function AuthForm({ showLogin, showSignup }: Props) {
       console.log("Login failed: ", err.response.data);
     }
   }
+
+  const handleSignup = async (e: React.SyntheticEvent<EventTarget>) => {
+    e.preventDefault();
+    const requestBody = JSON.stringify(
+      {
+        email: username,
+        password: password
+      }
+    )
+
+    console.log("resquest body from signup request: ", requestBody)
+    try {
+      const response = await axios.post(`${env.API_URL}/register`, requestBody)
+    } catch (err) {
+
+    }
+  }
   return (
     <>
       <div className="bg-white w-full h-screen flex justify-center items-center overflow-hidden">
@@ -46,6 +64,14 @@ function AuthForm({ showLogin, showSignup }: Props) {
 
           <form onSubmit={handleLogin}>
             <div className="w-80">
+              {showSignup &&
+                <input
+                  type="text"
+                  className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
+                  placeholder="Enter your name"
+                  onChange={(e) => { setUsername(e.target.value) }}
+                />
+              }
               <input
                 type="text"
                 className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
@@ -68,9 +94,9 @@ function AuthForm({ showLogin, showSignup }: Props) {
                 />
               }
               <button
-                className={`${(showSignup && (password !== confirmPswd)) ? "bg-gray" : "bg-black"} 
+                className={`${(showSignup && ((password !== confirmPswd) || name === "")) ? "bg-btn-gray" : "bg-black"} 
                   text-white w-full rounded-lg mt-4 py-3 cursor-pointer`}
-                disabled={showSignup && (password !== confirmPswd)}
+                disabled={showSignup && ((password !== confirmPswd) || name === "")}
               >
                 {showSignup ?
                   "Sign up" : "Log in"}

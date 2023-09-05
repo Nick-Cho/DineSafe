@@ -77,7 +77,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 
-		log.Printf(acc.Name)
+		// log.Printf(acc.Name)
 	}
 
 	// fmt.Printf("Response from db execution: %s\n", res)
