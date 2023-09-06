@@ -1,9 +1,34 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 function Home() {
-  return (
-    <div>home</div>
-  )
+    const [location, setLocation] = useState("");
+    return (
+        <div className="grid grid-cols-16">
+            <div className="bg-white h-screen flex justify-center items-center col-span-8 mx-36 mt-16">
+                <div className="block">
+                    <h1 className="font-uber text-btn-gray font-bold text-5xl leading-snug">
+                        Allowing you to enjoy your food worry free
+                    </h1>
+                    <h1 className="font-uber text-btn-gray text-md mt-3 ">
+                        Search a restaurant, check for allergies, and go.
+                    </h1>
+                    <form>            
+                        <input
+                            type="text"
+                            className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
+                            placeholder="Enter a location"
+                            onChange={(e)=>{setLocation(e.target.value)}}
+                        />
+                        <button 
+                            className="bg-black cursor-pointer text-white font-medium rounded-lg mt-4 py-3 px-10"
+                        >
+                            Search
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export default Home
