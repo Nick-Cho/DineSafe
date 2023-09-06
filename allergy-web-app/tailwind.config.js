@@ -18,6 +18,9 @@ module.exports = {
       gridTemplateColumns: {
         '16': 'repeat(16, minmax(0, 1fr))',        
       },
+      translate: {
+        '2xfull': '200%'
+      },
       gridColumnStart: {
         '13': '13',
         '14': '14',

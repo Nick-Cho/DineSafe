@@ -77,7 +77,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 
-		log.Printf(acc.Name)
+		// log.Printf(acc.Name)
 	}
 
 	// fmt.Printf("Response from db execution: %s\n", res)
@@ -92,7 +92,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	byteStrDbPswd := []byte(acc.Password)
 
 	err = bcrypt.CompareHashAndPassword(byteStrDbPswd, []byte(password))
-
+	log.Println("Value received from bcrypt compare function: ", err)
 	if err == nil {
 		//Succesful login
 		response := events.APIGatewayProxyResponse{
