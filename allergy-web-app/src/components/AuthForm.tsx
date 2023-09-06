@@ -75,7 +75,7 @@ function AuthForm({ showLogin, showSignup, setShowLogin, setShowSignup }: Props)
           </h1>
           <form onSubmit={showLogin ? handleLogin : handleSignup}>
             <div className="w-80">
-              {showSignup && 
+              {showSignup &&
                 <input
                   type="text"
                   className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
