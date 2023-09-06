@@ -83,7 +83,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	convertedHashedPswd := string(hashedPswd)
 
-	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Users (id, name, email, password) VALUES (2, '%s', '%s', '%s')", name, email, convertedHashedPswd)
+	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Users (name, email, password) VALUES ('%s', '%s', '%s')", name, email, convertedHashedPswd)
 	fmt.Printf("sql POST request: %s\n", sqlRequest)
 	res, err := db.Exec(sqlRequest)
 
@@ -114,7 +114,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 			"Access-Control-Allow-Headers":     "*",
 			"Access-Control-Allow-Credentials": "true",
 		},
-		Body: "success",
+		Body: fmt.Sprintf("%d", lastId),
 	}
 
 	return response, nil
