@@ -51,7 +51,7 @@ function AuthForm({ showLogin, showSignup, setShowLogin, setShowSignup }: Props)
       }
     )
 
-    console.log("resquest body from signup request: ", requestBody)
+    console.log("request body from signup request: ", requestBody)
     try {
       const response = await axios.post(`${env.API_URL}/registerUser`, requestBody)
       if (response.status === 200) {

@@ -24,7 +24,7 @@ function Navbar() {
     }
   }
   return (
-    <div>
+    <>
       <nav>
         <div className="sticky bg-black text-white font-uber font-medium text-l flex lg:justify-center z-50">
           <div className="ml-2 sm:ml-10 flex md:space-x-4">
@@ -54,7 +54,7 @@ function Navbar() {
 
             <div
               className="my-3 py-2 px-3 ml-2 rounded-full bg-white cursor-pointer font-small"
-              onClick={() => { displayForm("signUp") }}
+              onClick={() => { displayForm("signUp")}}
             >
               <h1 className="text-black">
                 Sign up
@@ -63,11 +63,11 @@ function Navbar() {
           </div>
         </div>
       </nav>
-
-      <div className={`relative overflow-hidden justify-center w-full h-screen ${(showLogin || showSignup) ? "translate-y-0 visible" : "-translate-y-full invisible"}  duration-300`}>
+      {
+      <div className={`absolute overflow-hidden justify-center w-full h-screen ${(showLogin || showSignup) ? "translate-y-0 visible" : "-translate-y-full invisible"}  duration-300`}>
         <AuthForm showLogin={showLogin} showSignup={showSignup} setShowLogin={setShowLogin} setShowSignup={setShowSignup}/>
-      </div>
-    </div>
+      </div>}
+    </>
   )
 }
 
