@@ -65,7 +65,7 @@ function Navbar() {
       </nav>
 
       <div className={`relative overflow-hidden justify-center w-full h-screen ${(showLogin || showSignup) ? "translate-y-0 visible" : "-translate-y-full invisible"}  duration-300`}>
-        <AuthForm showLogin={showLogin} showSignup={showSignup} />
+        <AuthForm showLogin={showLogin} showSignup={showSignup} setShowLogin={setShowLogin} setShowSignup={setShowSignup}/>
       </div>
     </div>
   )

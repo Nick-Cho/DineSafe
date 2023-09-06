@@ -7,7 +7,6 @@ import (
 	"log"
 
 	config "github.com/Nick-Cho/allergy-project/internal/config"
-	"github.com/Nick-Cho/allergy-project/internal/responses"
 	"github.com/aws/aws-lambda-go/events"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
@@ -25,6 +24,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	var requestBody map[string]string
 
 	if request.Body == "" {
+		log.Println("No request body provided")
 		response := events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Headers: map[string]string{
@@ -45,7 +45,16 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	if err != nil {
 		log.Println("error unmarshalling response body from register user request | ", err)
-		return responses.ServerError(err), fmt.Errorf("error unmarshalling response body from create user request")
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
+			},
+			Body: "Error unmarshalling response body from register user request",
+		}
+		return response, nil
 	}
 
 	//Should check if the user exists first
@@ -60,7 +69,16 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	if err != nil {
 		log.Println("error encrypting password | ", err)
-		return responses.ServerError(err), fmt.Errorf("error encrypting password")
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
+			},
+			Body: "Error encrypting password",
+		}
+		return response, nil
 	}
 
 	convertedHashedPswd := string(hashedPswd)
@@ -71,7 +89,17 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	if err != nil {
 		log.Println("error creating new user", err)
-		return responses.ServerError(err), fmt.Errorf("error inserting new entry into user table: %s", err)
+
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
+			},
+			Body: fmt.Sprintf("Error inserting new entry into user table: %s", err),
+		}
+		return response, nil
 	}
 
 	lastId, err := res.LastInsertId()

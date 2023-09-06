@@ -5,9 +5,11 @@ import axios from "axios"
 type Props = {
   showLogin: boolean;
   showSignup: boolean;
+  setShowLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowSignup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function AuthForm({ showLogin, showSignup }: Props) {
+function AuthForm({ showLogin, showSignup, setShowLogin, setShowSignup }: Props) {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +38,7 @@ function AuthForm({ showLogin, showSignup }: Props) {
     } catch (err: any) {
       console.log("Login failed: ", err.response.data);
     }
+    setShowLogin(false);
   }
 
   const handleSignup = async (e: React.SyntheticEvent<EventTarget>) => {
@@ -50,17 +53,18 @@ function AuthForm({ showLogin, showSignup }: Props) {
 
     console.log("resquest body from signup request: ", requestBody)
     try {
-      const response = await axios.post(`${env.API_URL}/register`, requestBody)
+      const response = await axios.post(`${env.API_URL}/registerUser`, requestBody)
       if (response.status === 200) {
-
+        console.log(response);
       }
 
       if (response && response.status === 400) {
-        
+        console.log("Signup failed: ", response.data);
       }
     } catch (err: any) {
-      console.log("Login failed: ", err.response.data);
+      console.log("Signup failed: ", err.response.data);
     }
+    setShowSignup(false);
   }
   return (
     <>
