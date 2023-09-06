@@ -42,6 +42,7 @@ function AuthForm({ showLogin, showSignup }: Props) {
     e.preventDefault();
     const requestBody = JSON.stringify(
       {
+        name: name,
         email: username,
         password: password
       }
@@ -50,8 +51,15 @@ function AuthForm({ showLogin, showSignup }: Props) {
     console.log("resquest body from signup request: ", requestBody)
     try {
       const response = await axios.post(`${env.API_URL}/register`, requestBody)
-    } catch (err) {
+      if (response.status === 200) {
 
+      }
+
+      if (response && response.status === 400) {
+        
+      }
+    } catch (err: any) {
+      console.log("Login failed: ", err.response.data);
     }
   }
   return (
@@ -61,10 +69,9 @@ function AuthForm({ showLogin, showSignup }: Props) {
           <h1 className="font-uber font-medium text-2xl">
             Welcome to Placeholder
           </h1>
-
-          <form onSubmit={handleLogin}>
+          <form onSubmit={showLogin ? handleLogin : handleSignup}>
             <div className="w-80">
-              { showSignup &&
+              {showSignup && 
                 <input
                   type="text"
                   className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
@@ -93,9 +100,9 @@ function AuthForm({ showLogin, showSignup }: Props) {
                 />
               }
               <button
-                className={`${(showSignup && ((password !== confirmPswd) || name === "")) ? "bg-btn-gray cursor-not-allowed" : "bg-black cursor-pointer"} 
+                className={`${(showSignup && ((password !== confirmPswd && password !== "") || name === "" || username === "")) ? "bg-btn-gray cursor-not-allowed" : "bg-black cursor-pointer"} 
                   text-white w-full rounded-lg mt-4 py-3`}
-                disabled={showSignup && ((password !== confirmPswd) || name === "")}
+                disabled={showSignup && ((password !== confirmPswd && password !== "") || name === "" || username === "")}
               >
                 {showSignup ?
                   "Sign up" : "Log in"

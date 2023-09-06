@@ -1,6 +1,7 @@
 package main
 
 import (
+	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -23,9 +24,25 @@ const (
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var requestBody map[string]string
 
+	if request.Body == "" {
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
+			},
+			Body: string("No request body provided"),
+		}
+		return response, nil
+	}
+
 	db := config.Connect()
 
-	err := json.Unmarshal([]byte(request.Body), &requestBody)
+	sDec, _ := b64.StdEncoding.DecodeString(request.Body)
+	log.Println("login request body: ", sDec)
+	err := json.Unmarshal([]byte(sDec), &requestBody)
+
 	if err != nil {
 		log.Println("error unmarshalling response body from register user request | ", err)
 		return responses.ServerError(err), fmt.Errorf("error unmarshalling response body from create user request")
@@ -35,6 +52,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	email := requestBody["email"]
 	name := requestBody["name"]
 	password := []byte(requestBody["password"])
+
 	fmt.Printf("Request email name and password: %s, %s, %s\n", email, name, password) //temp
 
 	//Encrypt password before saving it in DB
