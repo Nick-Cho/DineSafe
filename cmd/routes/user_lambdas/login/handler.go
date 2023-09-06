@@ -92,7 +92,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	byteStrDbPswd := []byte(acc.Password)
 
 	err = bcrypt.CompareHashAndPassword(byteStrDbPswd, []byte(password))
-
+	log.Println("Value received from bcrypt compare function: ", err)
 	if err == nil {
 		//Succesful login
 		response := events.APIGatewayProxyResponse{
