@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
-
+import homeBanner from '../assets/images/home_banner.jpg'
 function Home() {
     const [location, setLocation] = useState("");
     return (
         <div className="grid grid-cols-16">
-            <div className="bg-white h-screen flex justify-center items-center col-span-8 mx-36 mt-16">
+            <div className="bg-white h-screen flex justify-center items-center col-span-8 mx-36 -mt-10">
                 <div className="block">
                     <h1 className="font-uber text-btn-gray font-bold text-5xl leading-snug">
                         Allowing you to enjoy your food worry free
@@ -16,7 +16,7 @@ function Home() {
                         <input
                             type="text"
                             className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
-                            placeholder="Enter a location"
+                            placeholder="Where do you want to eat?"
                             onChange={(e)=>{setLocation(e.target.value)}}
                         />
                         <button 
@@ -26,6 +26,9 @@ function Home() {
                         </button>
                     </form>
                 </div>
+            </div>
+            <div className="h-screen w-full flex justify-center items-center col-span-8">
+                <img src={homeBanner} alt="home-banner" className=""/> 
             </div>
         </div>
     )

@@ -26,7 +26,7 @@ function Navbar() {
   return (
     <>
       <nav>
-        <div className="sticky bg-black text-white font-uber font-medium text-l flex lg:justify-center z-50">
+        <div className="sticky top-0 bg-black text-white font-uber font-medium text-l flex lg:justify-center z-50">
           <div className="ml-2 sm:ml-10 flex md:space-x-4">
             <Link to="/">
               <h1 className="text-2xl font-light py-4">
