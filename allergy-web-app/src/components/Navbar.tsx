@@ -10,7 +10,7 @@ import AuthForm from './AuthForm'
 function Navbar() {
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [showSignup, setShowSignup] = useState<boolean>(false);
-  const [isLoggedOut, setIsLoggedOut] = useState<boolean>(false); // Tracks use logged in status to update styling for the navbar
+  const [isLoggedOut, setIsLoggedOut] = useState<boolean>(true); // Tracks use logged in status to update styling for the navbar
   const [cookies, setCookies] = useCookies(["userId", "userEmail"]);
   const { userId, userEmail } = useSelector((state: any) => {
     return {
@@ -38,8 +38,9 @@ function Navbar() {
 
   useEffect(() => {
     if (cookies?.userId === "" || cookies?.userEmail === "") {
-      setIsLoggedOut(false);
+      setIsLoggedOut(true);
     } else {
+      setIsLoggedOut(false)
       dispatch({
         type: "auth/setUserId",
         payload: cookies.userId
