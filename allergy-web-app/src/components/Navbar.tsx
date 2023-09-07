@@ -1,12 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useCookies } from "react-cookie"
+import { useDispatch, useSelector } from "react-redux";
 
+import { getUserId, getUserEmail } from "../redux/reducers/initialAuthState";
+import { AppDispatch } from "../redux/store";
 import AuthForm from './AuthForm'
 
 function Navbar() {
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [showSignup, setShowSignup] = useState<boolean>(false);
-
+  const [isLoggedOut, setIsLoggedOut] = useState<boolean>(false); // Tracks use logged in status to update styling for the navbar
+  const [cookies, setCookies] = useCookies(["userId", "userEmail"]);
+  const { userId, userEmail } = useSelector((state: any) => {
+    return {
+      userId: getUserId(state),
+      userEmail: getUserEmail(state)
+    }
+  })
+  const dispatch: AppDispatch = useDispatch();
   const displayForm = async (request: string) => {
     if (request === "login") {
       if (showLogin) setShowLogin(false);
@@ -17,17 +29,33 @@ function Navbar() {
     }
     else if (request === "signUp") {
       if (showSignup) setShowSignup(false)
-      else{
+      else {
         setShowSignup(true);
         if (showLogin) setShowLogin(false);
       }
     }
   }
+
+  useEffect(() => {
+    if (cookies?.userId === "" || cookies?.userEmail === "") {
+      setIsLoggedOut(false);
+    } else {
+      dispatch({
+        type: "auth/setUserId",
+        payload: cookies.userId
+      })
+      dispatch({
+        type: "auth/setUserEmail",
+        payload: cookies.userEmail
+      })
+    }
+  }, [cookies?.userId, cookies?.userEmail])
+
   return (
     <>
       <nav>
         <div className="sticky top-0 bg-black text-white font-uber font-medium text-l flex lg:justify-center z-50">
-          <div className="ml-2 sm:ml-10 flex md:space-x-4">
+          <div className="ml-2 sm:ml-10 flex md:space-x-4" onClick={() => { setShowSignup(false); setShowLogin(false) }}>
             <Link to="/">
               <h1 className="text-2xl font-light py-4">
                 Placeholder
@@ -45,7 +73,7 @@ function Navbar() {
           <div className="flex absolute right-0 mr-2 sm:mr-10 lg:static lg:ml-50%" >
             <div
               className="my-3 py-2 px-3 rounded-full hover:bg-btn-gray cursor-pointer ease-in-out duration-300"
-              onClick={() => { displayForm("login")}}
+              onClick={() => { displayForm("login") }}
             >
               <h1>
                 Login
@@ -54,7 +82,7 @@ function Navbar() {
 
             <div
               className="my-3 py-2 px-3 ml-2 rounded-full bg-white cursor-pointer font-small"
-              onClick={() => { displayForm("signUp")}}
+              onClick={() => { displayForm("signUp") }}
             >
               <h1 className="text-black">
                 Sign up
@@ -64,9 +92,9 @@ function Navbar() {
         </div>
       </nav>
       {
-      <div className={`absolute overflow-hidden justify-center w-full h-screen ${(showLogin || showSignup) ? "translate-y-0 visible" : "-translate-y-full invisible"}  duration-300`}>
-        <AuthForm showLogin={showLogin} showSignup={showSignup} setShowLogin={setShowLogin} setShowSignup={setShowSignup}/>
-      </div>}
+        <div className={`absolute overflow-hidden justify-center w-full h-screen ${(showLogin || showSignup) ? "translate-y-0 visible" : "-translate-y-full invisible"}  duration-300`}>
+          <AuthForm showLogin={showLogin} showSignup={showSignup} setShowLogin={setShowLogin} setShowSignup={setShowSignup} />
+        </div>}
     </>
   )
 }
