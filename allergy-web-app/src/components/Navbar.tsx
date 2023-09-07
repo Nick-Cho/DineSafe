@@ -11,7 +11,7 @@ function Navbar() {
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [showSignup, setShowSignup] = useState<boolean>(false);
   const [isLoggedOut, setIsLoggedOut] = useState<boolean>(true); // Tracks use logged in status to update styling for the navbar
-  const [cookies, setCookies] = useCookies(["userId", "userEmail"]);
+  const [cookies] = useCookies(["userId", "userEmail"]);
   const { userId, userEmail } = useSelector((state: any) => {
     return {
       userId: getUserId(state),
@@ -99,14 +99,19 @@ function Navbar() {
 
             {!isLoggedOut &&
               <>
-                <div>
+                <div className="flex">
                   <Link to="/dashboard">
-                      <div className="my-3 py-2 px-3 rounded-full hover:bg-btn-gray cursor-pointer ease-in-out duration-300">
-                        <h1>
-                          Profile
-                        </h1>
-                      </div>
-                    </Link>
+                    <div className="my-3 py-2 px-3 rounded-full hover:bg-btn-gray cursor-pointer ease-in-out duration-300">
+                      <h1>
+                        Profile
+                      </h1>
+                    </div>
+                  </Link>
+                  <div className="my-3 py-2 px-3 ml-2 rounded-full bg-white cursor-pointer font-small">
+                    <h1 className="text-black">
+                      Logout
+                    </h1>
+                  </div>
                 </div>
               </>
             }

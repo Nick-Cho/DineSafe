@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import env from "react-dotenv";
 import axios from "axios"
-
+import { useCookies } from "react-cookie"
 type Props = {
   showLogin: boolean;
   showSignup: boolean;
@@ -14,6 +14,7 @@ function AuthForm({ showLogin, showSignup, setShowLogin, setShowSignup }: Props)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPswd, setConfirmPswd] = useState("");
+  const [cookies, setCookies] = useCookies(["userId", "userEmail"]);
 
   const handleLogin = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
@@ -29,8 +30,9 @@ function AuthForm({ showLogin, showSignup, setShowLogin, setShowSignup }: Props)
       const response = await axios.post(`${env.API_URL}/login`, requestBody);
       console.log(response);
       if (response.status === 200) {
-        //successful login, save user data in the redux store
-
+        // successful login, save user data in the redux store
+        setCookies("userId", response.data.userId, { path: "/" });
+        setCookies("userEmail", response.data.email, { path: "/" });
       }
       if (response && response.status === 400) {
         console.log("Failed login: ", response.data);
