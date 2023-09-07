@@ -28,7 +28,7 @@ function Home() {
                 </div>
             </div>
             <div className="h-screen w-full flex justify-center items-center col-span-8">
-                <img src={homeBanner} alt="home-banner" className=""/> 
+                <img src={homeBanner} alt="home-banner" className="w-full"/> 
             </div>
         </div>
     )
