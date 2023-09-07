@@ -18,6 +18,7 @@ function Navbar() {
       userEmail: getUserEmail(state)
     }
   })
+  
   const dispatch: AppDispatch = useDispatch();
   const displayForm = async (request: string) => {
     if (request === "login") {
@@ -37,9 +38,11 @@ function Navbar() {
   }
 
   useEffect(() => {
-    if (cookies?.userId === "" || cookies?.userEmail === "") {
+    if (cookies?.userId === "" || cookies?.userEmail === "" || cookies?.userId === undefined || cookies?.userEmail === undefined) {
       setIsLoggedOut(true);
     } else {
+      // console.log("cookies.userEmail: ", cookies.userEmail)
+      // console.log("cookies.userId: ", cookies.userId)
       setIsLoggedOut(false)
       dispatch({
         type: "auth/setUserId",
@@ -72,23 +75,41 @@ function Navbar() {
             </Link>
           </div>
           <div className="flex absolute right-0 mr-2 sm:mr-10 lg:static lg:ml-50%" >
-            <div
-              className="my-3 py-2 px-3 rounded-full hover:bg-btn-gray cursor-pointer ease-in-out duration-300"
-              onClick={() => { displayForm("login") }}
-            >
-              <h1>
-                Login
-              </h1>
-            </div>
+            {isLoggedOut &&
+              <>
+                <div
+                  className="my-3 py-2 px-3 rounded-full hover:bg-btn-gray cursor-pointer ease-in-out duration-300"
+                  onClick={() => { displayForm("login") }}
+                >
+                  <h1>
+                    Login
+                  </h1>
+                </div>
 
-            <div
-              className="my-3 py-2 px-3 ml-2 rounded-full bg-white cursor-pointer font-small"
-              onClick={() => { displayForm("signUp") }}
-            >
-              <h1 className="text-black">
-                Sign up
-              </h1>
-            </div>
+                <div
+                  className="my-3 py-2 px-3 ml-2 rounded-full bg-white cursor-pointer font-small"
+                  onClick={() => { displayForm("signUp") }}
+                >
+                  <h1 className="text-black">
+                    Sign up
+                  </h1>
+                </div>
+              </>
+            }
+
+            {!isLoggedOut &&
+              <>
+                <div>
+                  <Link to="/dashboard">
+                      <div className="my-3 py-2 px-3 rounded-full hover:bg-btn-gray cursor-pointer ease-in-out duration-300">
+                        <h1>
+                          Profile
+                        </h1>
+                      </div>
+                    </Link>
+                </div>
+              </>
+            }
           </div>
         </div>
       </nav>
