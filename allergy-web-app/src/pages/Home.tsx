@@ -1,10 +1,18 @@
 import React, {useState} from 'react'
+import axios from "axios"
+import env from "react-dotenv";
+
 import homeBanner from '../assets/images/home_banner.jpg'
 function Home() {
-    const [location, setLocation] = useState("");
+    const [search, setSearch] = useState("");
 
-    const handleLocation = (e: any) => {
-        
+    const handleSearch = (e: any) => {
+        setSearch(e.target.value);
+        const requestBody = JSON.stringify(
+            {
+              search: search,
+            }
+          )
     }
     return (
         <div className="grid grid-cols-16">
@@ -23,7 +31,7 @@ function Home() {
                             type="text"
                             className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
                             placeholder="Where do you want to eat?"
-                            onChange={(e)=>{handleLocation(e)}}
+                            onChange={(e)=>{handleSearch(e)}}
                         />
                         <button 
                             className="bg-black cursor-pointer text-white font-medium rounded-lg mt-4 py-3 px-10"

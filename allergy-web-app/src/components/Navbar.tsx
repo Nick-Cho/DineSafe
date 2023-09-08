@@ -16,8 +16,8 @@ function Navbar() {
     return {
       userId: getUserId(state),
       userEmail: getUserEmail(state)
-    }
-  })
+    };
+  });
   
   const dispatch: AppDispatch = useDispatch();
   const displayForm = async (request: string) => {
@@ -38,7 +38,13 @@ function Navbar() {
   }
 
   useEffect(() => {
-    if (cookies?.userId === "" || cookies?.userEmail === "" || cookies?.userId === undefined || cookies?.userEmail === undefined) {
+    if (cookies?.userId === "" || 
+        cookies?.userEmail === "" || 
+        cookies?.userId === undefined || 
+        cookies?.userEmail === undefined ||
+        userId === "" ||
+        userEmail === ""
+        ) {
       setIsLoggedOut(true);
     } else {
       // console.log("cookies.userEmail: ", cookies.userEmail)
@@ -53,6 +59,7 @@ function Navbar() {
         payload: cookies.userEmail
       })
     }
+    //eslint-disable-next-line
   }, [cookies?.userId, cookies?.userEmail])
 
   return (

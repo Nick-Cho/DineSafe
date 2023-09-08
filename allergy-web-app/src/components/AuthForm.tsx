@@ -1,20 +1,23 @@
+
 import React, { useState } from 'react'
 import env from "react-dotenv";
 import axios from "axios"
 import { useCookies } from "react-cookie"
+
 type Props = {
   showLogin: boolean;
   showSignup: boolean;
   setShowLogin: React.Dispatch<React.SetStateAction<boolean>>;
   setShowSignup: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 function AuthForm({ showLogin, showSignup, setShowLogin, setShowSignup }: Props) {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPswd, setConfirmPswd] = useState("");
-  const [cookies, setCookies] = useCookies(["userId", "userEmail"]);
+  // eslint-disable-next-line
+  const [_, setCookies] = useCookies(["userId", "userEmail"]);
 
   const handleLogin = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
