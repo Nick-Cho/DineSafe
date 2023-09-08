@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useCookies } from "react-cookie"
 import { useDispatch, useSelector } from "react-redux";
 
-import { getUserId, getUserEmail } from "../redux/reducers/initialAuthState";
+import { getUserId, getUserEmail } from "../redux/reducers/authReducer";
 import { AppDispatch } from "../redux/store";
 import AuthForm from './AuthForm'
 

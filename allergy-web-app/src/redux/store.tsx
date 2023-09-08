@@ -1,14 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { initialAuthState } from "./reducers/initialAuthState"
-import { authReducer } from "./reducers/initialAuthState"
+import { initialAuthState, authReducer } from "./reducers/authReducer"
+
+import { initialAppState, appReducer } from "./reducers/appReducer"
 
 const initialState = {
   authReducer: initialAuthState,
+  appReducer: initialAppState,
 };
 
 const reducer = {
   authReducer: authReducer,
+  appReducer: appReducer,
 };
 
 export const store = configureStore({
