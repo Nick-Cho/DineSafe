@@ -34,7 +34,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 		}
 		return response, nil
 	}
-	// url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%s&inputtype=textquery&fields=formatted_address,name,rating,opening_hours&key=%s", search, os.Getenv("GOOGLE_API_KEY"))
+	// "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%2Cname%2Crating%2Copening_hours&input=yunshang&inputtype=textquery&locationbias=circle%3A20000%4043.4730755%2C-80.5395694&key=AIzaSyCEMyZMx4vfrx8-fU22fwGljlPOBkEervo"
 	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address,name,rating,opening_hours&input=%s&inputtype=textquery&locationbias=circle:20000@%s,%s&key=%s", search, latitude, longitude, os.Getenv("GOOGLE_API_KEY"))
 	method := "GET"
 
