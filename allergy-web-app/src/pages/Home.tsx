@@ -8,7 +8,6 @@ import { getUserLat, getUserLong } from "../redux/reducers/appReducer";
 import { AppDispatch } from "../redux/store";
 import homeBanner from '../assets/images/home_banner.jpg'
 function Home() {
-    const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState<string[]>([]);
     const [cookies, setCookies] = useCookies(["latitude", "longitude"]);
 
@@ -51,20 +50,28 @@ function Home() {
     }, []);
 
     const handleSearch = async (e: any) => {
-        setSearch(e.target.value);
+        // setSearch(e.target.value);
         // console.log("Longitude, latitude: ", longitude, latitude);
-        console.log("search request: ", search);
-
+        // console.log("search request: ", search);
+        var search = e.target.value;
+        if (search[search.length-1] === " ") {
+            search = search.slice(0, search.length-1);
+        } 
+        search = search.replace(/\s/g, "%20");
+        
+        
         try {
             const response = await axios.get(`${env.API_URL}/searchRestaurant?search=${search}&longitude=${longitude}&latitude=${latitude}`);
+            console.log("search request string: ", search);
             console.log("search restaurant response: ", response);
+            
             if (response.status === 202) {
-
+                setSearchResults(response.data);
+                // console.log("search results: ", searchResults);
             }
         } catch (err: any) {
             console.log("Login failed: ", err);
         }
-
     }
 
     return (

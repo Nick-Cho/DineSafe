@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
 )
@@ -21,6 +22,10 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	log.Println("search parameter: ", search)
 	log.Println("longitude parameter: ", longitude)
 	log.Println("latitude parameter: ", latitude)
+
+	// Replacing white space with ASCII encoded space (%20)
+	replacementChar := "%20"
+	replacedStr := strings.ReplaceAll(search, " ", string(replacementChar))
 
 	if search == "" || longitude == "" || latitude == "" {
 		response := events.APIGatewayProxyResponse{
@@ -40,7 +45,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	address_sign := "%40"
 
 	proper_url := "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%2Cname%2Crating%2Copening_hours&input=yunshang&inputtype=textquery&locationbias=circle%3A20000%4043.4730755%2C-80.5395694&key=AIzaSyCEMyZMx4vfrx8-fU22fwGljlPOBkEervo"
-	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%sname%srating%sopening_hours&input=%s&inputtype=textquery&locationbias=circle%s20000%s%s%s%s&key=%s", comma, comma, comma, search, colon, address_sign, latitude, comma, longitude, os.Getenv("GOOGLE_API_KEY"))
+	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%sname%srating%sopening_hours&input=%s&inputtype=textquery&locationbias=circle%s20000%s%s%s%s&key=%s", comma, comma, comma, replacedStr, colon, address_sign, latitude, comma, longitude, os.Getenv("GOOGLE_API_KEY"))
 	log.Println("proper url call from api test website: ", proper_url)
 	log.Println("url call without ASCII characters: ", url)
 
