@@ -13,19 +13,6 @@ import (
 type Handler struct{}
 
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	// var requestBody map[string]string
-	// request.Body =
-	// 	`{
-	// 		"search": "Yunshang",
-	// 		"latitude": "43.8272",
-	// 		"longitude": "-79.2788992"
-	// 	}`
-	// err := json.Unmarshal([]byte(request.Body), &requestBody)
-
-	// if err != nil {
-	// 	log.Println("error unmarshalling lat and long | ", err)
-	// 	return responses.ServerError(err), fmt.Errorf("error unmarshalling lat and long")
-	// }
 
 	search := request.QueryStringParameters["search"]
 	longitude := request.QueryStringParameters["longitude"]
@@ -37,17 +24,18 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	if search == "" || longitude == "" || latitude == "" {
 		response := events.APIGatewayProxyResponse{
-			StatusCode: 202,
+			StatusCode: 400,
 			Headers: map[string]string{
 				"Access-Control-Allow-Origin":      "*",
 				"Access-Control-Allow-Headers":     "*",
 				"Access-Control-Allow-Credentials": "true",
 			},
-			Body: "Query string values missing in searchRestaurant route. Must provide a search longitude and a latitude",
+			Body: "Query string values missing in searchRestaurant route. Must provide a valid search longitude and a latitude",
 		}
 		return response, nil
 	}
-	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%s&inputtype=textquery&locationbias=circle:20000@%s,%s&fields=formatted_address,name,rating,opening_hours&key=%s", search, latitude, longitude, os.Getenv("GOOGLE_API_KEY"))
+	// url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=%s&inputtype=textquery&fields=formatted_address,name,rating,opening_hours&key=%s", search, os.Getenv("GOOGLE_API_KEY"))
+	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address,name,rating,opening_hours&input=%s&inputtype=textquery&locationbias=circle:20000@%s,%s&key=%s", search, latitude, longitude, os.Getenv("GOOGLE_API_KEY"))
 	method := "GET"
 
 	client := &http.Client{}
