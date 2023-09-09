@@ -34,8 +34,16 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 		}
 		return response, nil
 	}
-	// "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%2Cname%2Crating%2Copening_hours&input=yunshang&inputtype=textquery&locationbias=circle%3A20000%4043.4730755%2C-80.5395694&key=AIzaSyCEMyZMx4vfrx8-fU22fwGljlPOBkEervo"
-	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address,name,rating,opening_hours&input=%s&inputtype=textquery&locationbias=circle:20000@%s,%s&key=%s", search, latitude, longitude, os.Getenv("GOOGLE_API_KEY"))
+	// ASCII encoded characters
+	comma := "%2C"
+	colon := "%3A"
+	address_sign := "%40"
+
+	proper_url := "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%2Cname%2Crating%2Copening_hours&input=yunshang&inputtype=textquery&locationbias=circle%3A20000%4043.4730755%2C-80.5395694&key=AIzaSyCEMyZMx4vfrx8-fU22fwGljlPOBkEervo"
+	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%sname%srating%sopening_hours&input=%s&inputtype=textquery&locationbias=circle%s20000%s%s%s%s&key=%s", comma, comma, comma, search, colon, address_sign, latitude, comma, longitude, os.Getenv("GOOGLE_API_KEY"))
+	log.Println("proper url call from api test website: ", proper_url)
+	log.Println("url call without ASCII characters: ", url)
+
 	method := "GET"
 
 	client := &http.Client{}

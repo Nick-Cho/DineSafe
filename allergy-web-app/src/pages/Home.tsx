@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from "axios"
 import env from "react-dotenv";
 import { useCookies } from "react-cookie";
@@ -11,29 +11,29 @@ function Home() {
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState<string[]>([]);
     const [cookies, setCookies] = useCookies(["latitude", "longitude"]);
-    
+
     const { latitude, longitude } = useSelector((state: any) => {
         return {
-          latitude: getUserLat(state),
-          longitude: getUserLong(state)
+            latitude: getUserLat(state),
+            longitude: getUserLong(state)
         };
-      });
+    });
     const dispatch: AppDispatch = useDispatch();
     useEffect(() => {
         if (
-            cookies?.latitude === "" || 
-            cookies?.longitude === "" || 
-            cookies?.latitude === undefined || 
+            cookies?.latitude === "" ||
+            cookies?.longitude === "" ||
+            cookies?.latitude === undefined ||
             cookies?.longitude === undefined ||
             latitude === "" ||
             longitude === ""
-            ) {        
+        ) {
             if ("geolocation" in navigator) {
                 // User already enabled geolocation
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const {latitude, longitude} = position.coords;
-                    setCookies("latitude", latitude, {path: "/"});
-                    setCookies("longitude", longitude, {path: "/"});
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const { latitude, longitude } = position.coords;
+                    setCookies("latitude", latitude, { path: "/" });
+                    setCookies("longitude", longitude, { path: "/" });
                     dispatch({
                         type: "app/setUserLat",
                         payload: cookies.latitude
@@ -45,16 +45,16 @@ function Home() {
                 });
 
             } else {
-            console.log("Geolocation is not enabled on this browser");
+                console.log("Geolocation is not enabled on this browser");
             }
         }
-    },[]);
+    }, []);
 
     const handleSearch = async (e: any) => {
         setSearch(e.target.value);
         // console.log("Longitude, latitude: ", longitude, latitude);
         // console.log("search request: ", search);
-        
+
         try {
             const response = await axios.get(`${env.API_URL}/searchRestaurant?search=${search}&longitude=${longitude}&latitude=${latitude}`);
             console.log("search restaurant response: ", response);
@@ -64,7 +64,7 @@ function Home() {
         } catch (err: any) {
             console.log("Login failed: ", err);
         }
-        
+
     }
 
     return (
@@ -78,18 +78,18 @@ function Home() {
                     <h1 className="font-uber text-btn-gray text-md mt-3">
                         Search a restaurant, check for allergies, and go.
                     </h1>
-                    
-                    <form>            
+
+                    <form>
                         <input
                             type="text"
                             className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
                             placeholder="Where do you want to eat?"
-                            onChange={(e)=>{handleSearch(e)}}
+                            onChange={(e) => { handleSearch(e) }}
                         />
                         <div className="absolute bg-white rounded-lg ">
 
                         </div>
-                        <button 
+                        <button
                             className="bg-black cursor-pointer text-white font-medium rounded-lg mt-4 py-3 px-10"
                         >
                             Search
@@ -98,7 +98,7 @@ function Home() {
                 </div>
             </div>
             <div className="h-screen w-full flex justify-center items-center col-span-8">
-                <img src={homeBanner} alt="home-banner" className="w-full"/> 
+                <img src={homeBanner} alt="home-banner" className="w-full" />
             </div>
         </div>
     )
