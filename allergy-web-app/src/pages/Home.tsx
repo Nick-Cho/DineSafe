@@ -53,7 +53,7 @@ function Home() {
     const handleSearch = async (e: any) => {
         setSearch(e.target.value);
         // console.log("Longitude, latitude: ", longitude, latitude);
-        // console.log("search request: ", search);
+        console.log("search request: ", search);
 
         try {
             const response = await axios.get(`${env.API_URL}/searchRestaurant?search=${search}&longitude=${longitude}&latitude=${latitude}`);
