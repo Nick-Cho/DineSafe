@@ -78,9 +78,9 @@ function Home() {
     return (
         <div className="grid grid-cols-16 gap-2">
             <div className="col-span-10 lg:col-span-8">
-                <div className="bg-white w-screen md:w-full lg:w-auto lg:flex justify-center items-center mx-10 md:mx-40 lg:mx-36 mt-36 ">
+                <div className="bg-white w-screen md:w-full lg:w-auto lg:flex justify-center items-center mx-10 md:mx-40 lg:mx-36 mt-10 md:mt-36 ">
                     <div className="block">
-                        <h1 className="font-uber text-btn-gray font-bold text-5xl leading-snug">
+                        <h1 className="font-uber text-btn-gray font-bold text-4xl md:text-5xl leading-snug">
                             Allowing you to enjoy your food worry free
                         </h1>
 
