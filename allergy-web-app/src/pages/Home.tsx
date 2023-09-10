@@ -5,12 +5,13 @@ import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getUserLat, getUserLong } from "../redux/reducers/appReducer";
+import AutoComplete from "../components/AutoComplete";
 import { AppDispatch } from "../redux/store";
 import homeBanner from '../assets/images/home_banner.jpg'
 function Home() {
     const [searchResults, setSearchResults] = useState<string[]>([]);
     const [cookies, setCookies] = useCookies(["latitude", "longitude"]);
-
+    const [showAutoComplete, setShowAutoComplete] = useState<boolean>(false);
     const { latitude, longitude } = useSelector((state: any) => {
         return {
             latitude: getUserLat(state),
@@ -75,37 +76,44 @@ function Home() {
     }
 
     return (
-        <div className="grid grid-cols-16">
-            <div className="bg-white h-screen flex justify-center items-center col-span-8 mx-36 -mt-10">
-                <div className="block">
-                    <h1 className="font-uber text-btn-gray font-bold text-5xl leading-snug">
-                        Allowing you to enjoy your food worry free
-                    </h1>
+        <div className="grid grid-cols-16 gap-2">
+            <div className="col-span-10 lg:col-span-8">
+                <div className="bg-white w-screen md:w-full lg:w-auto lg:flex justify-center items-center mx-10 md:mx-40 lg:mx-36 mt-36 ">
+                    <div className="block">
+                        <h1 className="font-uber text-btn-gray font-bold text-5xl leading-snug">
+                            Allowing you to enjoy your food worry free
+                        </h1>
 
-                    <h1 className="font-uber text-btn-gray text-md mt-3">
-                        Search a restaurant, check for allergies, and go.
-                    </h1>
+                        <h1 className="font-uber text-btn-gray text-md mt-3">
+                            Search a restaurant, check for allergies, and go.
+                        </h1>
 
-                    <form>
-                        <input
-                            type="text"
-                            className="w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
-                            placeholder="Where do you want to eat?"
-                            onChange={(e) => { handleSearch(e) }}
-                        />
-                        <div className="absolute bg-white rounded-lg ">
-
-                        </div>
-                        <button
-                            className="bg-black cursor-pointer text-white font-medium rounded-lg mt-4 py-3 px-10"
-                        >
-                            Search
-                        </button>
-                    </form>
+                        <form>
+                            <div className = "w-100">
+                                <input
+                                    type="text"
+                                    className="w-96 xl:w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
+                                    placeholder="Where do you want to eat?"
+                                    onChange={(e) => { handleSearch(e) }}
+                                    onClick={() => { setShowAutoComplete(!showAutoComplete) }}
+                                />
+                                {showAutoComplete && <AutoComplete 
+                                // searchResults={searchResults} 
+                                />}
+                            </div>
+                            <button
+                                className="bg-black cursor-pointer text-white font-medium rounded-lg mt-4 py-3 px-10"
+                            >
+                                Search
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <div className="h-screen w-full flex justify-center items-center col-span-8">
-                <img src={homeBanner} alt="home-banner" className="w-full" />
+            <div className="col-span-7 lg:col-span-8">
+                <div className="lg:mt-36 w-screen lg:w-full lg:flex justify-center items-center">
+                    <img src={homeBanner} alt="home-banner" className="w-full" />
+                </div>
             </div>
         </div>
     )
