@@ -8,8 +8,17 @@ import { getUserLat, getUserLong } from "../redux/reducers/appReducer";
 import AutoComplete from "../components/AutoComplete";
 import { AppDispatch } from "../redux/store";
 import homeBanner from '../assets/images/home_banner.jpg'
+
+export interface State {
+    search_results: {
+        name: string, 
+        formatted_address: string, 
+        rating: number, 
+        opening_hours: {open_now: boolean}
+    }[]
+}
 function Home() {
-    const [searchResults, setSearchResults] = useState<string[]>([]);
+    const [searchResults, setSearchResults] = useState<State["search_results"]>([]);
     const [cookies, setCookies] = useCookies(["latitude", "longitude"]);
     const [showAutoComplete, setShowAutoComplete] = useState<boolean>(false);
     const { latitude, longitude } = useSelector((state: any) => {
@@ -48,12 +57,14 @@ function Home() {
                 console.log("Geolocation is not enabled on this browser");
             }
         }
-    }, []);
+        // eslint-disable-next-line
+    }, [latitude, longitude , cookies.latitude, cookies.longitude]);
 
     const handleSearch = async (e: any) => {
         // setSearch(e.target.value);
         // console.log("Longitude, latitude: ", longitude, latitude);
         // console.log("search request: ", search);
+        setShowAutoComplete(true);
         var search = e.target.value;
         if (search[search.length-1] === " ") {
             search = search.slice(0, search.length-1);
@@ -67,11 +78,14 @@ function Home() {
             console.log("search restaurant response: ", response);
             
             if (response.status === 202) {
-                setSearchResults(response.data);
-                // console.log("search results: ", searchResults);
+                setSearchResults(response.data.candidates);
+                console.log("search results: ", searchResults);
             }
         } catch (err: any) {
-            console.log("Login failed: ", err);
+            if (err?.response?.status === 400) {
+                setSearchResults([]);
+            }
+            console.log("searchRestaurant request failed: ", err);
         }
     }
 
@@ -98,7 +112,7 @@ function Home() {
                                     onClick={() => { setShowAutoComplete(!showAutoComplete) }}
                                 />
                                 {showAutoComplete && <AutoComplete 
-                                // searchResults={searchResults} 
+                                searchResults={searchResults} 
                                 />}
                             </div>
                             <button

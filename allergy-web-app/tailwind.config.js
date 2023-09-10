@@ -8,6 +8,7 @@ module.exports = {
     colors: { 
         "white": "#ffffff",
         "black": "#000000",
+        "light-gray": "#bbbbbb", 
         "btn-gray": "#333333",
         "gray": "#eeeeee"
     },
