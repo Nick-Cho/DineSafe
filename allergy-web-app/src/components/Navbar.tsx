@@ -126,7 +126,7 @@ function Navbar() {
         </div>
       </nav>
       {
-        <div className={`absolute overflow-hidden justify-center w-full h-screen ${(showLogin || showSignup) ? "translate-y-0 visible" : "-translate-y-full invisible"}  duration-300`}>
+        <div className={`absolute overflow-hidden justify-center z-30 w-full h-screen ${(showLogin || showSignup) ? "translate-y-0 visible" : "-translate-y-full invisible"}  duration-300`}>
           <AuthForm showLogin={showLogin} showSignup={showSignup} setShowLogin={setShowLogin} setShowSignup={setShowSignup} />
         </div>}
     </>

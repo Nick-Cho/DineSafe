@@ -2,9 +2,9 @@ import React from 'react'
 
 function AutoComplete({searchResults}: any) {
   return (
-    <div className="w-96 lg:w-full relative">
+    <div className="w-96 lg:w-full relative z-10">
         <div className={
-            `absolute w-full text-center bg-white rounded-lg 
+            `absolute w-full text-center bg-white rounded-lg z-10
             ${searchResults.length=== 0 ? "py-10" : "py-2"} 
             drop-shadow-lg`}>
         {searchResults.length === 0 &&  
