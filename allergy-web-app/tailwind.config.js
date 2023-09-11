@@ -10,7 +10,10 @@ module.exports = {
         "black": "#000000",
         "light-gray": "#bbbbbb", 
         "btn-gray": "#333333",
-        "gray": "#eeeeee"
+        "gray": "#eeeeee",
+        "blue": "rgb(59 130 246)",
+        "green": "rgb(74 222 128)",
+        "red": "rgb(225 29 72)",
     },
     fontFamily: {
       'uber': ['Uber Move Text', 'sans-serif']
