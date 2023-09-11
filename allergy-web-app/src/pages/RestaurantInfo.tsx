@@ -9,10 +9,12 @@ import { getUserLat, getUserLong } from "../redux/reducers/appReducer";
 import { AppDispatch } from "../redux/store";
 function RestaurantInfo() {
   const [cookies, setCookies] = useCookies(["latitude", "longitude"])
+  //Variables for restaurant info
   const [address, setAddress] = useState<string>("");
   const [rating, setRating] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const params = useParams();
+
   const dispatch: AppDispatch = useDispatch();
   const { latitude, longitude } = useSelector((state: any) => {
     return {
@@ -54,20 +56,28 @@ function RestaurantInfo() {
 
   useEffect(() => {
     const getRestaurantInfo = async () => {
-      try {
-        const response = await axios.get(`${env.API_URL}/searchRestaurant?search=${params.name}&longitude=${cookies.longitude}&latitude=${cookies.latitude}`);
-        if (response.status === 202) {
-          setAddress(response.data.candidates[0].formatted_address);
-          setRating(response.data.candidates[0].rating);
-          setIsOpen(response.data.candidates[0].opening_hours.open_now);
+      if (env?.API_URL) {
+        try {
+          const searchResponse = await axios.get(`${env.API_URL}/searchRestaurant?search=${params.name}&longitude=${cookies.longitude}&latitude=${cookies.latitude}`);
+          if (searchResponse.status === 202) {
+            setAddress(searchResponse.data.candidates[0].formatted_address);
+            setRating(searchResponse.data.candidates[0].rating);
+            setIsOpen(searchResponse.data.candidates[0].opening_hours.open_now);
+          }
+          const getReviewsResp = await axios.get(`${env.API_URL}/getRestaurantReviews?street_address=${address}`);
+          if (getReviewsResp.status === 201) {
+            // status code for restaurant not yet being inserted into the database
+            const insertResp = await axios.post(`${env.API_URL}/insertRestaurant`,)
+          }
+          console.log("getRestaurantReviews response: ", getReviewsResp)
+          // console.log("search restaurant return: ", searchResponse);}
+        } catch (err: any) {
+          console.log("searchRestaurant endpoint error: ", err);
         }
-        // console.log("search restaurant return: ", response);
-      } catch (err: any) {
-        console.log("searchRestaurant endpoint error: ", err.response.data);
       }
     }
     getRestaurantInfo();
-  }, [])
+  }, [env?.API_URL])
 
   return (
     <div className="grid grid-cols-16 mt-16">

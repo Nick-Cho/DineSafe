@@ -65,7 +65,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	if restaurant.Name == "" {
 		// Case where no restaurant currently exists with the address provided
 		response := events.APIGatewayProxyResponse{
-			StatusCode: 202,
+			StatusCode: 201,
 			Headers: map[string]string{
 				"Access-Control-Allow-Origin":      "*",
 				"Access-Control-Allow-Headers":     "*",
