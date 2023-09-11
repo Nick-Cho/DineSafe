@@ -952,6 +952,10 @@ video {
     margin-top: 9rem;
   }
 
+  .lg\:mt-64 {
+    margin-top: 16rem;
+  }
+
   .lg\:flex {
     display: flex;
   }
@@ -970,6 +974,10 @@ video {
 }
 
 @media (min-width: 1280px) {
+  .xl\:mt-64 {
+    margin-top: 16rem;
+  }
+
   .xl\:w-full {
     width: 100%;
   }

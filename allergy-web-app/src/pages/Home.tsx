@@ -11,10 +11,10 @@ import homeBanner from '../assets/images/home_banner.jpg'
 
 export interface State {
     search_results: {
-        name: string, 
-        formatted_address: string, 
-        rating: number, 
-        opening_hours: {open_now: boolean}
+        name: string,
+        formatted_address: string,
+        rating: number,
+        opening_hours: { open_now: boolean }
     }[]
 }
 function Home() {
@@ -58,7 +58,7 @@ function Home() {
             }
         }
         // eslint-disable-next-line
-    }, [latitude, longitude , cookies.latitude, cookies.longitude]);
+    }, [latitude, longitude, cookies.latitude, cookies.longitude]);
 
     const handleSearch = async (e: any) => {
         // setSearch(e.target.value);
@@ -66,17 +66,17 @@ function Home() {
         // console.log("search request: ", search);
         setShowAutoComplete(true);
         var search = e.target.value;
-        if (search[search.length-1] === " ") {
-            search = search.slice(0, search.length-1);
-        } 
+        if (search[search.length - 1] === " ") {
+            search = search.slice(0, search.length - 1);
+        }
         search = search.replace(/\s/g, "%20");
-        
-        
+
+
         try {
             const response = await axios.get(`${env.API_URL}/searchRestaurant?search=${search}&longitude=${longitude}&latitude=${latitude}`);
             // console.log("search request string: ", search);
             // console.log("search restaurant response: ", response);
-            
+
             if (response.status === 202) {
                 setSearchResults(response.data.candidates);
                 // console.log("search results: ", searchResults);
@@ -92,7 +92,7 @@ function Home() {
     return (
         <div className="grid grid-cols-16 gap-2">
             <div className="col-span-10 lg:col-span-8">
-                <div className="bg-white w-screen md:w-full lg:w-auto lg:flex justify-center items-center mx-10 md:mx-40 lg:mx-36 mt-10 md:mt-36 ">
+                <div className="bg-white w-screen md:w-full lg:w-auto lg:flex justify-center items-center mx-10 md:mx-40 lg:mx-36 mt-10 md:mt-36 xl:mt-64">
                     <div className="block">
                         <h1 className="font-uber text-btn-gray font-bold text-4xl md:text-5xl leading-snug">
                             Allowing you to enjoy your food worry free
@@ -103,7 +103,7 @@ function Home() {
                         </h1>
 
                         <form>
-                            <div className = "w-100">
+                            <div className="w-100">
                                 <input
                                     type="text"
                                     className="w-96 xl:w-full bg-gray focus:border-black rounded-lg mt-4 py-3 px-4"
@@ -111,8 +111,8 @@ function Home() {
                                     onChange={(e) => { handleSearch(e) }}
                                     onClick={() => { setShowAutoComplete(!showAutoComplete) }}
                                 />
-                                {showAutoComplete && <AutoComplete 
-                                searchResults={searchResults} 
+                                {showAutoComplete && <AutoComplete
+                                    searchResults={searchResults}
                                 />}
                             </div>
                             <button
