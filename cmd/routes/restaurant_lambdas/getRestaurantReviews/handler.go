@@ -30,7 +30,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	streetAddress := request.QueryStringParameters["street_address"]
 	if streetAddress == "" {
 		response := events.APIGatewayProxyResponse{
-			StatusCode: 202,
+			StatusCode: 400,
 			Headers: map[string]string{
 				"Access-Control-Allow-Origin":      "*",
 				"Access-Control-Allow-Headers":     "*",

@@ -74,12 +74,12 @@ function Home() {
         
         try {
             const response = await axios.get(`${env.API_URL}/searchRestaurant?search=${search}&longitude=${longitude}&latitude=${latitude}`);
-            console.log("search request string: ", search);
-            console.log("search restaurant response: ", response);
+            // console.log("search request string: ", search);
+            // console.log("search restaurant response: ", response);
             
             if (response.status === 202) {
                 setSearchResults(response.data.candidates);
-                console.log("search results: ", searchResults);
+                // console.log("search results: ", searchResults);
             }
         } catch (err: any) {
             if (err?.response?.status === 400) {
