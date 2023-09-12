@@ -65,19 +65,19 @@ function RestaurantInfo() {
           if (searchResponse.status === 202) {
             setAddress(searchResponse.data.candidates[0].formatted_address);
             setRating(searchResponse.data.candidates[0].rating);
-            setIsOpen(searchResponse.data.candidates[0].opening_hours.open_now);
+            setIsOpen(searchResponse.data.candidates[0].opening_hours?.open_now);
           }
-          const getReviewsResp = await axios.get(`${env.API_URL}/getRestaurantReviews?street_address=${address}`);
+          // console.log(address);
+          const getReviewsResp = await axios.get(`${env.API_URL}/getRestaurantReviews?street_address=${searchResponse.data.candidates[0].formatted_address}`);
           if (getReviewsResp.status === 201) {
             // status code for restaurant not yet being inserted into the database
-            console.log("flag 1");
             const requestBody = JSON.stringify({
               street_address: address,
               name: params.name
             })
             try {
               const insertResp = await axios.post(`${env.API_URL}/insertRestaurant`, requestBody);
-              if (insertResp.status === 202){
+              if (insertResp.status === 202) {
                 // successful insertion
                 setReviews([]);
               }
@@ -113,6 +113,10 @@ function RestaurantInfo() {
         </div>
         <h1 className="font-uber font-medium text-sm">
           {address}
+        </h1>
+
+        <h1>
+
         </h1>
       </div>
     </div>
