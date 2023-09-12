@@ -1,6 +1,7 @@
 package main
 
 import (
+	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -34,7 +35,9 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 		return response, nil
 	}
 
-	err := json.Unmarshal([]byte(request.Body), &requestBody)
+	sDec, _ := b64.StdEncoding.DecodeString(request.Body)
+
+	err := json.Unmarshal([]byte(sDec), &requestBody)
 
 	if err != nil {
 		log.Println("error unmarshalling response body from insert restaurant request | ", err)
