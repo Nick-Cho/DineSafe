@@ -7,6 +7,7 @@ import axios from "axios"
 
 import { getUserLat, getUserLong } from "../redux/reducers/appReducer";
 import { AppDispatch } from "../redux/store";
+
 function RestaurantInfo() {
   const [cookies, setCookies] = useCookies(["latitude", "longitude"])
   //Variables for restaurant info
@@ -14,6 +15,8 @@ function RestaurantInfo() {
   const [rating, setRating] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const params = useParams();
+
+  const [reviews, setReviews] = useState<string[]>([]);
 
   const dispatch: AppDispatch = useDispatch();
   const { latitude, longitude } = useSelector((state: any) => {
@@ -67,7 +70,20 @@ function RestaurantInfo() {
           const getReviewsResp = await axios.get(`${env.API_URL}/getRestaurantReviews?street_address=${address}`);
           if (getReviewsResp.status === 201) {
             // status code for restaurant not yet being inserted into the database
-            const insertResp = await axios.post(`${env.API_URL}/insertRestaurant`,)
+            console.log("flag 1");
+            const requestBody = JSON.stringify({
+              street_address: address,
+              name: params.name
+            })
+            try {
+              const insertResp = await axios.post(`${env.API_URL}/insertRestaurant`, requestBody);
+              if (insertResp.status === 202){
+                // successful insertion
+                setReviews([]);
+              }
+            } catch (err) {
+              console.log("Insert restaurant error: ", err);
+            }
           }
           console.log("getRestaurantReviews response: ", getReviewsResp)
           // console.log("search restaurant return: ", searchResponse);}

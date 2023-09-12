@@ -16,9 +16,23 @@ type Handler struct{}
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var requestBody map[string]string
 
-	log.Println(request.Body)
+	// log.Println(request.Body)
 
 	db := config.Connect()
+
+	if request.Body == "" {
+		log.Println("No request body provided")
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
+			},
+			Body: string("No request body provided"),
+		}
+		return response, nil
+	}
 
 	err := json.Unmarshal([]byte(request.Body), &requestBody)
 
@@ -29,10 +43,9 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	address := requestBody["street_address"]
 	name := requestBody["name"]
-	city := requestBody["city"]
-	fmt.Printf("Requested Insert Restaurant: %s, %s, %s\n", address, name, city)
+	fmt.Printf("Requested Insert Restaurant: %s, %s\n", address, name)
 
-	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Restaurants (street_address, name, city) VALUES ('%s', '%s', '%s')", address, name, city)
+	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Restaurants (street_address, name) VALUES ('%s', '%s')", address, name)
 	fmt.Printf("sql POST request: %s\n", sqlRequest)
 	res, err := db.Exec(sqlRequest)
 
