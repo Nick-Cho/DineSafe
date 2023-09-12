@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getUserId, getUserEmail } from "../redux/reducers/authReducer";
 import { AppDispatch } from "../redux/store";
-import AuthForm from './AuthForm'
+import AuthForm from './Forms/AuthForm'
 
 function Navbar() {
   const [showLogin, setShowLogin] = useState<boolean>(false);

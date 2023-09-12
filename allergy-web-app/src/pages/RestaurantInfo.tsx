@@ -7,16 +7,17 @@ import axios from "axios"
 
 import { getUserLat, getUserLong } from "../redux/reducers/appReducer";
 import { AppDispatch } from "../redux/store";
-
+import AddReviewForm from "../components/Forms/AddReviewForm"
 function RestaurantInfo() {
   const [cookies, setCookies] = useCookies(["latitude", "longitude"])
   //Variables for restaurant info
   const [address, setAddress] = useState<string>("");
   const [rating, setRating] = useState<number>(0);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false); // Tracking if the restaurant is currently open
   const params = useParams();
 
   const [reviews, setReviews] = useState<string[]>([]);
+  const [addReview, setAddReview] = useState<boolean>(); // Tracks if the user wants to bring up the add review ui
 
   const dispatch: AppDispatch = useDispatch();
   const { latitude, longitude } = useSelector((state: any) => {
@@ -99,22 +100,25 @@ function RestaurantInfo() {
   return (
     <div className="grid grid-cols-16 mt-16">
       <div className="col-start-4 col-span-10 rounded-lg px-4 py-6 bg-gray">
-        <h1 className="text-black font-uber font-bold text-4xl">
-          {params.name}
-        </h1>
-        <div className="flex font-uber font-medium text-lg">
-          <h1 className="text-black">
-            Rating:
+        <>
+          <h1 className="text-black font-uber font-bold text-4xl">
+            {params.name}
           </h1>
-          <span>&nbsp;</span>
-          <h1 className="text-blue">
-            {rating}
+          <div className="flex font-uber font-medium text-lg">
+            <h1 className="text-black">
+              Rating:
+            </h1>
+            <span>&nbsp;</span>
+            <h1 className="text-blue">
+              {rating}
+            </h1>
+            <h1 className={`${isOpen ? "text-green" : "text-red"} ml-5`}> {isOpen ? "Open Now!" : "Closed"} </h1>
+          </div>
+          <h1 className="font-uber font-medium text-sm">
+            {address}
           </h1>
-          <h1 className={`${isOpen ? "text-green" : "text-red"} ml-5`}> {isOpen ? "Open Now!" : "Closed"} </h1>
-        </div>
-        <h1 className="font-uber font-medium text-sm">
-          {address}
-        </h1>
+        </>
+
         <div className="mt-10">
           <h1 className="font-uber font-bold text-3xl">
             Items to Watch Out For:
@@ -123,11 +127,21 @@ function RestaurantInfo() {
             {reviews.length === 0 && 
               <div className="py-4 px-6 mt-3 bg-white rounded-lg"> 
                 <h1 className="font-uber font-medium text-lg my-3">No allergies recorded yet, be the first!</h1>
-                <button className="bg-black text-white font-uber rounded-full font-small px-2 py-1">Record an allergy</button>
+                <button 
+                  className="bg-black text-white font-uber rounded-lg font-medium px-2 py-1 cursor-pointer"
+                  onClick={()=>{setAddReview(true)}}
+                >
+                  Record an allergy
+                </button>
               </div>
             }
           </h1>
         </div>
+        {addReview &&
+          <div className="w-full flex">
+            <AddReviewForm/>
+          </div>
+        }
       </div>
     </div>
   )
