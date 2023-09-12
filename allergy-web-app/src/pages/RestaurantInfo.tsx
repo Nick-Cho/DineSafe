@@ -69,10 +69,11 @@ function RestaurantInfo() {
           }
           // console.log(address);
           const getReviewsResp = await axios.get(`${env.API_URL}/getRestaurantReviews?street_address=${searchResponse.data.candidates[0].formatted_address}`);
+          
           if (getReviewsResp.status === 201) {
             // status code for restaurant not yet being inserted into the database
             const requestBody = JSON.stringify({
-              street_address: address,
+              street_address: searchResponse.data.candidates[0].formatted_address,
               name: params.name
             })
             try {

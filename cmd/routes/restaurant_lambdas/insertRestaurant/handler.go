@@ -58,7 +58,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	}
 
 	lastId, err := res.LastInsertId()
-	fmt.Printf("User ID inserted: %d\n", lastId)
+	fmt.Printf("Restaurant ID inserted: %d\n", lastId)
 
 	defer db.Close()
 
