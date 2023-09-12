@@ -98,7 +98,7 @@ function RestaurantInfo() {
 
   return (
     <div className="grid grid-cols-16 mt-16">
-      <div className="col-start-4 col-span-10">
+      <div className="col-start-4 col-span-10 rounded-lg px-4 py-6 bg-gray">
         <h1 className="text-black font-uber font-bold text-4xl">
           {params.name}
         </h1>
@@ -115,10 +115,19 @@ function RestaurantInfo() {
         <h1 className="font-uber font-medium text-sm">
           {address}
         </h1>
-
-        <h1>
-
-        </h1>
+        <div className="mt-10">
+          <h1 className="font-uber font-bold text-3xl">
+            Items to Watch Out For:
+          </h1>
+          <h1 className="font-uber">
+            {reviews.length === 0 && 
+              <div className="py-4 px-6 mt-3 bg-white rounded-lg"> 
+                <h1 className="font-uber font-medium text-lg my-3">No allergies recorded yet, be the first!</h1>
+                <button className="bg-black text-white font-uber rounded-full font-small px-2 py-1">Record an allergy</button>
+              </div>
+            }
+          </h1>
+        </div>
       </div>
     </div>
   )
