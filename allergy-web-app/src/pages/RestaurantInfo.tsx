@@ -139,7 +139,7 @@ function RestaurantInfo() {
         </div>
         {addReview &&
           <div className="w-full flex">
-            <AddReviewForm/>
+            <AddReviewForm address={address}/>
           </div>
         }
       </div>

@@ -1,6 +1,7 @@
 package main
 
 import (
+	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -16,18 +17,13 @@ type Handler struct{}
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var requestBody map[string]string
 
-	// request.Body =
-	// 	`{
-	// 		"review": "Example review",
-	// 		"street_address": "5285 Yonge St Unit5",
-	// 		"user_id": "1"
-	// 	}`
-
 	log.Println(request.Body)
 
 	db := config.Connect()
 
-	err := json.Unmarshal([]byte(request.Body), &requestBody)
+	sDec, _ := b64.StdEncoding.DecodeString(request.Body)
+
+	err := json.Unmarshal([]byte(sDec), &requestBody)
 
 	if err != nil {
 		log.Println("error unmarshalling response body from add Review request | ", err)
@@ -35,11 +31,16 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	}
 
 	review := requestBody["review"]
+	allergy := requestBody["allergy"]
 	streetAddress := requestBody["street_address"]
-	userId := requestBody["user_id"]
+	userId := "1"
+	if requestBody["user_id"] != "" {
+		userId = requestBody["user_id"]
+	}
+
 	fmt.Printf("Requested Insert Review: %s, %s, %s\n", review, streetAddress, userId)
 
-	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Reviews (review) VALUES ('%s')", review)
+	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Reviews (review, allergy) VALUES ('%s', %s)", review, allergy)
 	// fmt.Printf("sql POST request: %s\n", sqlRequest)
 	res, err := db.Exec(sqlRequest)
 

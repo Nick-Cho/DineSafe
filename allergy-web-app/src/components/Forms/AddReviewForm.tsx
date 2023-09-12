@@ -1,12 +1,30 @@
 import React, {useState} from 'react'
+import env from "react-dotenv"
 import axios from "axios";
 
-function AddReviewForm() {
+type Props = {
+    address: string
+}
+
+function AddReviewForm({address}: Props) {
     const [allergy, setAllergy] = useState<string>(""); // Tracks the allergy selected by the user in the review
     const [item, setItem] = useState<string>(""); // Tracks the item that the user has had an allergic reaction with 
+    const handleSubmit = async () => {
+        try {
+            const requestBody = JSON.stringify({
+                review: item,
+                allergy: allergy,
+                street_address: address
+            })
+            const response = await axios.post(`${env.API_URL}/addReview`,requestBody);
+            console.log("Response from addReview endpoint: ", response);
+        } catch (err) {
+            console.log("Error from addReview call: ", err);
+        }
+    }
     return (
         <div className="mt-5 w-full bg-white p-5 rounded-lg">
-            <form onSubmit={()=>{}}>
+            <form onSubmit={()=>{handleSubmit()}}>
                 <select 
                     name="allergies" 
                     className="mb-5 px-3 py-2 font-uber bg-gray rounded-lg"
