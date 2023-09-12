@@ -19,6 +19,21 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	log.Println(request.Body)
 
+	if request.Body == "" {
+		log.Println("No request body provided")
+		response := events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     "*",
+				"Access-Control-Allow-Credentials": "true",
+			},
+			Body: string("No request body provided"),
+		}
+		return response, nil
+
+	}
+
 	db := config.Connect()
 
 	sDec, _ := b64.StdEncoding.DecodeString(request.Body)
