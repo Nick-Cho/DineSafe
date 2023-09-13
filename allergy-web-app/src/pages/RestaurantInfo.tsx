@@ -17,7 +17,7 @@ function RestaurantInfo() {
   const params = useParams();
 
   const [reviews, setReviews] = useState<string[]>([]);
-  const [addReview, setAddReview] = useState<boolean>(); // Tracks if the user wants to bring up the add review ui
+  const [addReview, setAddReview] = useState<boolean>(false); // Tracks if the user wants to bring up the add review ui
 
   const dispatch: AppDispatch = useDispatch();
   const { latitude, longitude } = useSelector((state: any) => {
@@ -83,11 +83,11 @@ function RestaurantInfo() {
                 // successful insertion
                 setReviews([]);
               }
-            } catch (err) {
-              console.log("Insert restaurant error: ", err);
+            } catch (err: any) {
+              console.log("Insert restaurant error: ", err?.message);
             }
           }
-          console.log("getRestaurantReviews response: ", getReviewsResp)
+          // console.log("getRestaurantReviews response: ", getReviewsResp)
           // console.log("search restaurant return: ", searchResponse);}
         } catch (err: any) {
           console.log("searchRestaurant endpoint error: ", err);
@@ -139,7 +139,7 @@ function RestaurantInfo() {
         </div>
         {addReview &&
           <div className="w-full flex">
-            <AddReviewForm address={address}/>
+            <AddReviewForm address={address} setAddReview={setAddReview}/>
           </div>
         }
       </div>

@@ -49,19 +49,20 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 	allergy := requestBody["allergy"]
 	streetAddress := requestBody["street_address"]
 	userId := "1"
+
 	if requestBody["user_id"] != "" {
 		userId = requestBody["user_id"]
 	}
 
-	fmt.Printf("Requested Insert Review: %s, %s, %s\n", review, streetAddress, userId)
+	fmt.Printf("Requested Insert Review: %s, %s, %s, %s\n", review, streetAddress, userId, allergy)
 
-	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Reviews (review, allergy) VALUES ('%s', %s)", review, allergy)
+	sqlRequest := fmt.Sprintf("INSERT INTO allergy_db.Reviews (review, allergy) VALUES ('%s', '%s')", review, allergy)
 	// fmt.Printf("sql POST request: %s\n", sqlRequest)
 	res, err := db.Exec(sqlRequest)
 
 	if err != nil {
-		log.Println("error creating new restaurant", err)
-		return responses.ServerError(err), fmt.Errorf("error inserting new entry into user table: %s", err)
+		log.Println("error creating new review", err)
+		return responses.ServerError(err), fmt.Errorf("error inserting new entry into review table: %s", err)
 	}
 
 	lastId, err := res.LastInsertId()
