@@ -14,14 +14,14 @@ import (
 type Handler struct{}
 
 type ReviewInfo struct {
-	Id     int    `json:"id"`
-	Review string `json:"review"`
+	Id      int    `json:"id"`
+	Review  string `json:"review"`
+	Allergy string `json:"allergy"`
 }
 
 type RestaurantInfo struct {
 	StreetAddress string `json:"streetAddress"`
 	Name          string `json:"name"`
-	City          string `json:"city"`
 }
 
 func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -41,7 +41,7 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 		return response, nil
 	}
-
+	fmt.Println("street address: ", streetAddress)
 	// Checking if the restaurant exists before trying to grab the reviews linked to it
 	restaurantCheck := fmt.Sprintf("SELECT * FROM allergy_db.Restaurants WHERE street_address='%s'", streetAddress)
 
@@ -56,11 +56,11 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 
 	for res.Next() {
 		// for each row, scan the result into our tag composite object
-		err = res.Scan(&restaurant.StreetAddress, &restaurant.Name, &restaurant.City)
+		err = res.Scan(&restaurant.StreetAddress, &restaurant.Name)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
-		// log.Printf("Queried restaurant name: %s", restaurant.Name)
+		fmt.Printf("Queried restaurant name: %s", restaurant.Name)
 	}
 	if restaurant.Name == "" {
 		// Case where no restaurant currently exists with the address provided
@@ -96,8 +96,9 @@ func (h *Handler) HandleRequest(request events.APIGatewayProxyRequest) (events.A
 		// for each row, scan the result into our tag composite object
 		var tempId int
 		var tempReview string
+		var tempAllergy string
 
-		err = res.Scan(&tempId, &tempReview) // &tempId, &tempReview
+		err = res.Scan(&tempId, &tempReview, &tempAllergy) // &tempId, &tempReview
 
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app

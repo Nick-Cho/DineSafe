@@ -16,6 +16,7 @@ function RestaurantInfo() {
   const [isOpen, setIsOpen] = useState<boolean>(false); // Tracking if the restaurant is currently open
   const params = useParams();
 
+  const [reviewsLoaded, setReviewsLoaded] = useState<boolean>(false); // Tracks if the reviews have been loaded from the database
   const [reviews, setReviews] = useState<string[]>([]);
   const [addReview, setAddReview] = useState<boolean>(false); // Tracks if the user wants to bring up the add review ui
 
@@ -69,9 +70,20 @@ function RestaurantInfo() {
             setIsOpen(searchResponse.data.candidates[0].opening_hours?.open_now);
           }
           // console.log(address);
-          const getReviewsResp = await axios.get(`${env.API_URL}/getRestaurantReviews?street_address=${searchResponse.data.candidates[0].formatted_address}`);
-          
-          if (getReviewsResp.status === 201) {
+          const getReviewsResp = await axios.get(`${env.API_URL}/getRestaurantReviews?street_address=${encodeURIComponent(searchResponse.data.candidates[0].formatted_address.trim())}`);
+          // console.log("Get Reviews response: ", getReviewsResp)
+          if (getReviewsResp.status === 202 && !reviewsLoaded) {
+            // successful retrieval
+            // console.log("reviews loaded: ", reviewsLoaded);
+            // console.log("GetReviews return where reviews exist: ", getReviewsResp.data);
+            const reviews: string[] = [];
+            getReviewsResp.data.forEach((review: any) => {
+              reviews.push(review.review);
+            })
+            setReviewsLoaded(true);
+            setReviews(reviews);
+          }
+          else if (getReviewsResp.status === 201) {
             // status code for restaurant not yet being inserted into the database
             const requestBody = JSON.stringify({
               street_address: searchResponse.data.candidates[0].formatted_address,
@@ -95,7 +107,7 @@ function RestaurantInfo() {
       }
     }
     getRestaurantInfo();
-  }, [env?.API_URL])
+  }, [])
 
   return (
     <div className="grid grid-cols-16 mt-16">
@@ -123,7 +135,7 @@ function RestaurantInfo() {
           <h1 className="font-uber font-bold text-3xl">
             Items to Watch Out For:
           </h1>
-          <h1 className="font-uber">
+          <div className="font-uber">
             {reviews.length === 0 && 
               <div className="py-4 px-6 mt-3 bg-white rounded-lg"> 
                 <h1 className="font-uber font-medium text-lg my-3">No allergies recorded yet, be the first!</h1>
@@ -135,7 +147,16 @@ function RestaurantInfo() {
                 </button>
               </div>
             }
-          </h1>
+            {reviews.map((review, index) => {
+              return (
+                <div key={index} className="py-4 px-6 mt-3 bg-white rounded-lg">
+                  <h1 className="font-uber font-medium text-lg my-3">
+                    {review}
+                  </h1>
+                </div>
+              )
+            })}
+          </div>
         </div>
         {addReview &&
           <div className="w-full flex">
