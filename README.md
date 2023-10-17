@@ -9,3 +9,6 @@ Backend: AWS (Lambda, APIGateway, S3, IAM), Golang
 Database: AWS RDS (MySQL)
 Other Tools: AWS (Route53, Cloudformation, Cloudwatch, Codebuild, Codepipeline)
 ![image](https://github.com/Nick-Cho/DineSafe/assets/65980644/66d59ed6-b693-4be5-adc3-13f387156bbc)
+
+https://github.com/Nick-Cho/DineSafe/assets/65980644/615d5f90-b990-459f-8570-f7c65805030c
+
